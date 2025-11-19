@@ -15,6 +15,7 @@ class ColumnDefinition {
     this.isUnique = false,
     this.defaultValue,
     this.foreignKey,
+    String? checkConstraint,
   });
 
   String get sqlDefinition {

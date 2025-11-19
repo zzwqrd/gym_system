@@ -1,5 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../builders/column_type.dart';
+import '../builders/table_builder.dart';
 import 'migration.dart';
 
 class CreateProductsTable extends Migration {
@@ -8,58 +10,50 @@ class CreateProductsTable extends Migration {
 
   @override
   Future<void> up(DatabaseExecutor db) async {
-    await createTable(db, 'products', '''
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      slug TEXT UNIQUE NOT NULL,
-      description TEXT,
-      short_description TEXT,
-      sku TEXT UNIQUE,
-      price REAL NOT NULL DEFAULT 0,
-      sale_price REAL,
-      cost_price REAL,
-      stock_quantity INTEGER DEFAULT 0,
-      min_stock_level INTEGER DEFAULT 0,
-      weight REAL,
-      dimensions TEXT,
-      category_id INTEGER,
-      brand TEXT,
-      tags TEXT,
-      images TEXT,
-      is_active INTEGER DEFAULT 1,
-      is_featured INTEGER DEFAULT 0,
-      created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-      updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-      FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
-    ''');
-
-    await createIndex(db, 'idx_products_slug', 'products', 'slug');
-    await createIndex(db, 'idx_products_sku', 'products', 'sku');
-    await createIndex(db, 'idx_products_category', 'products', 'category_id');
-    await createIndex(db, 'idx_products_active', 'products', 'is_active');
-    await createIndex(db, 'idx_products_featured', 'products', 'is_featured');
-    await createIndex(db, 'idx_products_price', 'products', 'price');
-
-    // إنشاء trigger لتحديث updated_at
-    await db.execute('''
-      CREATE TRIGGER IF NOT EXISTS update_products_timestamp
-      AFTER UPDATE ON products
-      BEGIN
-        UPDATE products SET updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime') 
-        WHERE id = NEW.id;
-      END
-    ''');
+    await TableBuilder(db, 'products')
+        .addColumn('id', ColumnType.primaryKey)
+        .addColumn('name', ColumnType.text, isNotNull: true)
+        .addColumn('slug', ColumnType.text, isNotNull: true, isUnique: true)
+        .addColumn('description', ColumnType.text)
+        .addColumn('short_description', ColumnType.text)
+        .addColumn('sku', ColumnType.text, isUnique: true)
+        .addColumn('price', ColumnType.real, isNotNull: true, defaultValue: '0')
+        .addColumn('sale_price', ColumnType.real)
+        .addColumn('cost_price', ColumnType.real)
+        .addColumn('stock_quantity', ColumnType.integer, defaultValue: '0')
+        .addColumn('min_stock_level', ColumnType.integer, defaultValue: '0')
+        .addColumn('weight', ColumnType.real)
+        .addColumn('dimensions', ColumnType.text)
+        .addColumn('category_id', ColumnType.integer)
+        .addColumn('brand', ColumnType.text)
+        .addColumn('tags', ColumnType.text)
+        .addColumn('images', ColumnType.text)
+        .addColumn('is_active', ColumnType.boolean, defaultValue: '1')
+        .addColumn('is_featured', ColumnType.boolean, defaultValue: '0')
+        .addColumn(
+          'created_at',
+          ColumnType.timestamp,
+          defaultValue: "CURRENT_TIMESTAMP",
+        )
+        .addColumn(
+          'updated_at',
+          ColumnType.timestamp,
+          defaultValue: "CURRENT_TIMESTAMP",
+        )
+        .addIndex('slug', unique: true)
+        .addIndex('sku', unique: true)
+        .addIndex('category_id')
+        .addIndex('is_active')
+        .addIndex('is_featured')
+        .addIndex('price')
+        .addIndex('stock_quantity')
+        .addIndex('brand')
+        .addTimestampTrigger()
+        .create();
   }
 
   @override
   Future<void> down(DatabaseExecutor db) async {
-    await db.execute('DROP TRIGGER IF EXISTS update_products_timestamp');
-    await dropIndex(db, 'idx_products_slug');
-    await dropIndex(db, 'idx_products_sku');
-    await dropIndex(db, 'idx_products_category');
-    await dropIndex(db, 'idx_products_active');
-    await dropIndex(db, 'idx_products_featured');
-    await dropIndex(db, 'idx_products_price');
-    await dropTable(db, 'products');
+    await TableBuilder(db, 'products').drop();
   }
 }

@@ -1,5 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../builders/column_type.dart';
+import '../builders/table_builder.dart';
 import 'migration.dart';
 
 class CreateInventoryTable extends Migration {
@@ -8,39 +10,47 @@ class CreateInventoryTable extends Migration {
 
   @override
   Future<void> up(DatabaseExecutor db) async {
-    await createTable(db, 'inventory', '''
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      barcode TEXT NOT NULL,
-      name TEXT NOT NULL,
-      location TEXT,
-      count INTEGER DEFAULT 0,
-      action TEXT CHECK(action IN ('increment', 'decrement')) DEFAULT 'increment',
-      created_by INTEGER NOT NULL,
-      created_by_type TEXT CHECK(created_by_type IN ('user', 'admin')) NOT NULL,
-      created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-      updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
-    ''');
-
-    // Trigger لتحديث updated_at عند التعديل
-    await db.execute('''
-      CREATE TRIGGER IF NOT EXISTS update_inventory_timestamp
-      AFTER UPDATE ON inventory
-      BEGIN
-        UPDATE inventory
-        SET updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')
-        WHERE id = NEW.id;
-      END;
-    ''');
-
-    await createIndex(db, 'idx_inventory_barcode', 'inventory', 'barcode');
-    await createIndex(db, 'idx_inventory_creator', 'inventory', 'created_by');
+    await TableBuilder(db, 'inventory')
+        .addColumn('id', ColumnType.primaryKey)
+        .addColumn('barcode', ColumnType.text, isNotNull: true)
+        .addColumn('name', ColumnType.text, isNotNull: true)
+        .addColumn('location', ColumnType.text)
+        .addColumn('count', ColumnType.integer, defaultValue: '0')
+        .addColumnWithCheck(
+          'action',
+          ColumnType.text,
+          checkConstraint: "IN ('increment', 'decrement')",
+          defaultValue: "'increment'",
+        )
+        .addColumn('created_by', ColumnType.integer, isNotNull: true)
+        .addColumnWithCheck(
+          'created_by_type',
+          ColumnType.text,
+          isNotNull: true,
+          checkConstraint: "IN ('user', 'admin')",
+          defaultValue: "'admin'",
+        )
+        .addColumn(
+          'created_at',
+          ColumnType.timestamp,
+          defaultValue: "(strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
+        )
+        .addColumn(
+          'updated_at',
+          ColumnType.timestamp,
+          defaultValue: "(strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
+        )
+        .addIndex('barcode')
+        .addIndex('created_by')
+        .addIndex('location')
+        .addIndex('count')
+        .addIndex('action')
+        .addTimestampTrigger()
+        .createWithChecks();
   }
 
   @override
   Future<void> down(DatabaseExecutor db) async {
-    await db.execute('DROP TRIGGER IF EXISTS update_inventory_timestamp');
-    await dropIndex(db, 'idx_inventory_barcode');
-    await dropIndex(db, 'idx_inventory_creator');
-    await dropTable(db, 'inventory');
+    await TableBuilder(db, 'inventory').drop();
   }
 }

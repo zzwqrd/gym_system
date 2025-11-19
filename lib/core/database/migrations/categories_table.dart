@@ -1,5 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../builders/column_type.dart';
+import '../builders/table_builder.dart';
 import '../seeder/add_default_categories_seeder.dart';
 import 'migration.dart';
 
@@ -9,67 +11,44 @@ class CreateCategoriesTable extends Migration {
 
   @override
   Future<void> up(DatabaseExecutor db) async {
-    await createTable(db, 'categories', '''
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      slug TEXT UNIQUE NOT NULL,
-      description TEXT,
-      image TEXT,
-      parent_id INTEGER,
-      sort_order INTEGER DEFAULT 0,
-      is_active INTEGER DEFAULT 1,
-      created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-      updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-      FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
-    ''');
-
-    await createIndex(db, 'idx_categories_slug', 'categories', 'slug');
-    await createIndex(db, 'idx_categories_parent', 'categories', 'parent_id');
-    await createIndex(db, 'idx_categories_active', 'categories', 'is_active');
-
-    // إنشاء trigger لتحديث updated_at
-    await db.execute('''
-      CREATE TRIGGER IF NOT EXISTS update_categories_timestamp
-      AFTER UPDATE ON categories
-      BEGIN
-        UPDATE categories SET updated_at = strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime') 
-        WHERE id = NEW.id;
-      END
-    ''');
+    await TableBuilder(db, 'categories')
+        .addColumn('id', ColumnType.primaryKey)
+        .addColumn('name', ColumnType.text, isNotNull: true)
+        .addColumn('slug', ColumnType.text, isNotNull: true, isUnique: true)
+        .addColumn('description', ColumnType.text)
+        .addColumn('image', ColumnType.text)
+        .addColumn('parent_id', ColumnType.integer)
+        .addColumn('sort_order', ColumnType.integer, defaultValue: '0')
+        .addColumn('is_active', ColumnType.boolean, defaultValue: '1')
+        .addColumn(
+          'created_at',
+          ColumnType.timestamp,
+          defaultValue: "(strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
+        )
+        .addColumn(
+          'updated_at',
+          ColumnType.timestamp,
+          defaultValue: "(strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
+        )
+        // إضافة فهرس للـ foreign key
+        .addIndex('slug')
+        .addIndex('parent_id')
+        .addIndex('is_active')
+        .addIndex('sort_order')
+        // إضافة التريجر للتحديث التلقائي
+        .addTimestampTrigger()
+        // إنشاء الجدول
+        .create();
 
     // إدراج فئات افتراضية
     await AddMassiveCategoriesSeeder().run(db);
-    // await insertData(db, 'categories', [
-    //   {
-    //     'name': 'إلكترونيات',
-    //     'slug': 'electronics',
-    //     'description': 'أجهزة إلكترونية متنوعة',
-    //     'sort_order': 1,
-    //     'is_active': 1,
-    //   },
-    //   {
-    //     'name': 'ملابس',
-    //     'slug': 'clothing',
-    //     'description': 'ملابس رجالية ونسائية',
-    //     'sort_order': 2,
-    //     'is_active': 1,
-    //   },
-    //   {
-    //     'name': 'كتب',
-    //     'slug': 'books',
-    //     'description': 'كتب متنوعة',
-    //     'sort_order': 3,
-    //     'is_active': 1,
-    //   },
-    // ]);
   }
 
   @override
   Future<void> down(DatabaseExecutor db) async {
-    await db.execute('DROP TRIGGER IF EXISTS update_categories_timestamp');
-    await dropIndex(db, 'idx_categories_slug');
-    await dropIndex(db, 'idx_categories_parent');
-    await dropIndex(db, 'idx_categories_active');
-    await dropTable(db, 'categories');
+    // التراجع عن السيدر أولاً
+    // await AddMassiveCategoriesSeeder().rollback(db);
+    // ثم حذف الجدول
+    await TableBuilder(db, 'categories').drop();
   }
 }

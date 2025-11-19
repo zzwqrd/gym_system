@@ -1,5 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../builders/column_type.dart';
+import '../builders/table_builder.dart';
 import '../seeder/permissions_seeder.dart';
 import 'migration.dart';
 
@@ -9,49 +11,58 @@ class CreatePermissionsTable extends Migration {
 
   @override
   Future<void> up(DatabaseExecutor db) async {
-    await createTable(db, 'permissions', '''
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      permission_name TEXT UNIQUE NOT NULL,
-      display_name TEXT NOT NULL,
-      description TEXT,
-      module TEXT NOT NULL,
-      is_active INTEGER DEFAULT 1,
-      created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-      updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
-    ''');
+    // جدول الصلاحيات
+    await TableBuilder(db, 'permissions')
+        .addColumn('id', ColumnType.primaryKey)
+        .addColumn(
+          'permission_name',
+          ColumnType.text,
+          isNotNull: true,
+          isUnique: true,
+        )
+        .addColumn('display_name', ColumnType.text, isNotNull: true)
+        .addColumn('description', ColumnType.text)
+        .addColumn('module', ColumnType.text, isNotNull: true)
+        .addColumn('is_active', ColumnType.boolean, defaultValue: '1')
+        .addColumn(
+          'created_at',
+          ColumnType.timestamp,
+          defaultValue: "CURRENT_TIMESTAMP",
+        )
+        .addColumn(
+          'updated_at',
+          ColumnType.timestamp,
+          defaultValue: "CURRENT_TIMESTAMP",
+        )
+        .addIndex('permission_name', unique: true)
+        .addIndex('module')
+        .addIndex('is_active')
+        .addTimestampTrigger()
+        .create();
 
-    // ✅ تعديل اسم العمود في الفهرسة ليتطابق مع permission_name
-    await createIndex(
-        db, 'idx_permissions_name', 'permissions', 'permission_name');
-    await createIndex(db, 'idx_permissions_module', 'permissions', 'module');
+    // جدول صلاحيات الأدوار
+    await TableBuilder(db, 'role_permissions')
+        .addColumn('id', ColumnType.primaryKey)
+        .addColumn('role_id', ColumnType.integer, isNotNull: true)
+        .addColumn('permission_id', ColumnType.integer, isNotNull: true)
+        .addColumn(
+          'created_at',
+          ColumnType.timestamp,
+          defaultValue: "CURRENT_TIMESTAMP",
+        )
+        .addIndex('role_id')
+        .addIndex('permission_id')
+        .addCompositeIndex(['role_id', 'permission_id'], unique: true)
+        .create();
 
-    await createTable(db, 'role_permissions', '''
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      role_id INTEGER NOT NULL,
-      permission_id INTEGER NOT NULL,
-      created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-      FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
-      FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE,
-      UNIQUE(role_id, permission_id)
-    ''');
-
-    await createIndex(
-        db, 'idx_role_permissions_role', 'role_permissions', 'role_id');
-    await createIndex(db, 'idx_role_permissions_permission', 'role_permissions',
-        'permission_id');
-
-    // ✅ تأكد أن PermissionsSeeder يستخدم permission_name وليس name
+    // إضافة البيانات الأساسية
     await PermissionsSeeder().run(db);
   }
 
   @override
   Future<void> down(DatabaseExecutor db) async {
-    await dropIndex(db, 'idx_role_permissions_role');
-    await dropIndex(db, 'idx_role_permissions_permission');
-    await dropTable(db, 'role_permissions');
-
-    await dropIndex(db, 'idx_permissions_name');
-    await dropIndex(db, 'idx_permissions_module');
-    await dropTable(db, 'permissions');
+    // await PermissionsSeeder().rollback(db);
+    await TableBuilder(db, 'role_permissions').drop();
+    await TableBuilder(db, 'permissions').drop();
   }
 }

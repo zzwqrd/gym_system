@@ -12,9 +12,9 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'config/get_platform.dart' show pt, PlatformInfo, PTExt;
-import 'core/bloc_observer.dart';
 import 'core/database/db_helper.dart';
 import 'core/database/helpers/database_backup_helper.dart';
+import 'core/ui/bloc_observer.dart';
 import 'di/service_locator.dart' as di;
 
 class AppInitializer {

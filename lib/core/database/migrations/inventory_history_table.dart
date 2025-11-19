@@ -1,5 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
+import '../builders/column_type.dart';
+import '../builders/table_builder.dart';
 import 'migration.dart';
 
 class CreateInventoryHistoryTable extends Migration {
@@ -9,36 +11,49 @@ class CreateInventoryHistoryTable extends Migration {
 
   @override
   Future<void> up(DatabaseExecutor db) async {
-    await db.execute('DROP TABLE IF EXISTS inventory_history');
+    // استخدام TableBuilder للجزء الأساسي
+    await TableBuilder(db, 'inventory_history')
+        .addColumn('id', ColumnType.primaryKey)
+        .addColumn('inventory_id', ColumnType.integer, isNotNull: true)
+        .addColumn('barcode', ColumnType.text, isNotNull: true)
+        .addColumn('name', ColumnType.text, isNotNull: true)
+        .addColumn('location', ColumnType.text)
+        .addColumn('count', ColumnType.integer, isNotNull: true)
+        .addColumn('performed_by', ColumnType.integer, isNotNull: true)
+        .addColumn(
+          'performed_at',
+          ColumnType.timestamp,
+          defaultValue: "(strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
+        )
+        .addColumn(
+          'created_at',
+          ColumnType.timestamp,
+          defaultValue: "(strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
+        )
+        .addColumn(
+          'updated_at',
+          ColumnType.timestamp,
+          defaultValue: "(strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
+        )
+        .addIndex('inventory_id')
+        .addIndex('performed_by')
+        .addIndex('barcode')
+        .addIndex('performed_at')
+        .addTimestampTrigger()
+        .create();
 
+    // إضافة الأعمدة ذات القيود CHECK يدوياً
     await db.execute('''
-      CREATE TABLE inventory_history (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        inventory_id INTEGER NOT NULL,
-        barcode TEXT NOT NULL,
-        name TEXT NOT NULL,
-        location TEXT,
-        count INTEGER NOT NULL,
-        action TEXT CHECK(action IN ('increment', 'decrement')) NOT NULL,
-        performed_by INTEGER NOT NULL,
-        performed_by_type TEXT CHECK(performed_by_type IN ('user', 'admin')) NOT NULL,
-        performed_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-        created_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-        updated_at TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
-        FOREIGN KEY (inventory_id) REFERENCES inventory(id) ON DELETE CASCADE
-      );
+      ALTER TABLE inventory_history ADD COLUMN action TEXT CHECK(action IN ('increment', 'decrement')) NOT NULL
     ''');
 
-    await db.execute(
-        'CREATE INDEX idx_inventory_history_inventory ON inventory_history(inventory_id)');
-    await db.execute(
-        'CREATE INDEX idx_inventory_history_actor ON inventory_history(performed_by)');
+    await db.execute('''
+      ALTER TABLE inventory_history ADD COLUMN performed_by_type TEXT CHECK(performed_by_type IN ('user', 'admin')) NOT NULL
+    ''');
   }
 
   @override
   Future<void> down(DatabaseExecutor db) async {
-    await dropIndex(db, 'idx_inventory_history_inventory');
-    await dropIndex(db, 'idx_inventory_history_actor');
-    await dropTable(db, 'inventory_history');
+    await TableBuilder(db, 'inventory_history').drop();
   }
 }

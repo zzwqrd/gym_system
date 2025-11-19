@@ -11,7 +11,30 @@ class TableBuilder {
   final List<String> _triggers = [];
 
   TableBuilder(this._db, this._tableName);
-
+  // في TableBuilder class
+  TableBuilder addForeignKey(
+    String column,
+    String referencesTable,
+    String referencesColumn, {
+    String onDelete = 'CASCADE',
+    String onUpdate = 'CASCADE',
+  }) {
+    // البحث عن العمود وإضافة Foreign Key constraint
+    final columnIndex = _columns.indexWhere((col) => col.name == column);
+    if (columnIndex != -1) {
+      final columnDef = _columns[columnIndex];
+      _columns[columnIndex] = ColumnDefinition(
+        name: columnDef.name,
+        type: columnDef.type,
+        isNotNull: columnDef.isNotNull,
+        isUnique: columnDef.isUnique,
+        defaultValue: columnDef.defaultValue,
+        foreignKey:
+            'REFERENCES $referencesTable($referencesColumn) ON DELETE $onDelete ON UPDATE $onUpdate',
+      );
+    }
+    return this;
+  }
   // ========== COLUMN METHODS ========== //
 
   TableBuilder addColumn(
@@ -35,6 +58,50 @@ class TableBuilder {
     return this;
   }
 
+  // أضف هذه الدوال في TableBuilder class
+  Future<TableBuilder> createWithChecks() async {
+    if (_columns.isEmpty) {
+      throw Exception('No columns defined for table $_tableName');
+    }
+
+    // إنشاء الجدول
+    final columnsSql = _columns.map((col) => col.sqlDefinition).join(', ');
+    await _db.execute('CREATE TABLE IF NOT EXISTS $_tableName ($columnsSql)');
+
+    // إنشاء الفهارس
+    for (final indexSql in _indexes) {
+      await _db.execute(indexSql);
+    }
+
+    // إنشاء التريجرز
+    for (final triggerSql in _triggers) {
+      await _db.execute(triggerSql);
+    }
+
+    return this;
+  }
+
+  // أو بدلاً من ذلك، يمكنك إضافة دالة للتعامل مع القيود مباشرة في addColumn:
+  TableBuilder addColumnWithCheck(
+    String name,
+    ColumnType type, {
+    bool isNotNull = false,
+    bool isUnique = false,
+    String? defaultValue,
+    String? checkConstraint,
+  }) {
+    _columns.add(
+      ColumnDefinition(
+        name: name,
+        type: type,
+        isNotNull: isNotNull,
+        isUnique: isUnique,
+        defaultValue: defaultValue,
+        checkConstraint: checkConstraint,
+      ),
+    );
+    return this;
+  }
   // ========== INDEX METHODS ========== //
 
   TableBuilder addIndex(String columnName, {bool unique = false}) {
