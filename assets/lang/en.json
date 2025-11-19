@@ -1,0 +1,10 @@
+{
+    "auth": {
+        "title": "Login View",
+        "login_button": "Login",
+        "email_placeholder": "Email",
+        "password_placeholder": "Password",
+        "email_required_error": "Email cannot be empty.",
+        "password_required_error": "Password cannot be empty."
+    }
+}

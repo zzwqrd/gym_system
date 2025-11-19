@@ -1,0 +1,10 @@
+{
+    "auth": {
+        "title": "تسجيل الدخول",
+        "login_button": "تسجيل الدخول",
+        "email_placeholder": "البريد الإلكتروني",
+        "password_placeholder": "كلمة المرور",
+        "email_required_error": "البريد الإلكتروني مطلوب.",
+        "password_required_error": "كلمة المرور مطلوبة."
+    }
+}
