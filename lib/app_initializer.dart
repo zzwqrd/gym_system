@@ -40,7 +40,7 @@ class AppInitializer {
       // ✅ 2. تهيئة القاعدة فعليًا (بعد الاسترجاع)
       final db = await DBHelper().database;
       print('✅ Database initialized successfully');
-      final data = await db.query('users');
+      final data = await db.query('products');
 
       if (data.isEmpty) {
         print(
