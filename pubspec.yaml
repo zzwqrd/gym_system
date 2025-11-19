@@ -23,6 +23,7 @@ dependencies:
   path_provider: ^2.1.5
   equatable: ^2.0.7
   lottie:
+  croppy:
   bloc: ^9.1.0
   crypto: ^3.0.7
   path: ^1.9.1
