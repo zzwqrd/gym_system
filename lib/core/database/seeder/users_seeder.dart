@@ -51,7 +51,7 @@ class UsersSeeder implements Seeder {
         'token': _generateToken('editor@example.com'),
         'phone': '01100000000',
         'avatar': null,
-        'is_active': 1,
+        'is_active': 0,
         'is_verified': 1,
         'last_login_at': now,
         'created_at': now,
