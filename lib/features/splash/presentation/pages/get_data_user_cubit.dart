@@ -17,7 +17,10 @@ class GetDataUserCubit extends Cubit<GetDataUserState> {
       final results = await _dbHelper.table('users').get();
 
       final users = results.map((userMap) => User.fromMap(userMap)).toList();
-
+      if (users.isEmpty) {
+        emit(GetDataUserLoaded([]));
+        return;
+      }
       emit(GetDataUserLoaded(users));
     } catch (e) {
       emit(GetDataUserError('Failed to load users: $e'));
