@@ -10,7 +10,7 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GetDataUserCubit()..getInactiveUsers(),
+      create: (context) => GetDataUserCubit()..getUsersWithGroupedConditions(),
       child: Scaffold(
         appBar: AppBar(title: Text('Users')),
         body: BlocBuilder<GetDataUserCubit, GetDataUserState>(
