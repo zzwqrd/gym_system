@@ -15,33 +15,31 @@ class SplashView extends StatelessWidget {
         appBar: AppBar(title: Text('Users')),
         body: BlocBuilder<GetDataUserCubit, GetDataUserState>(
           builder: (context, state) {
-            if (state is GetDataUserLoading) {
-              return Center(child: CircularProgressIndicator());
+            switch (state) {
+              case GetDataUserInitial():
+                return Center(child: Text('Please wait...'));
+              case GetDataUserLoading():
+                return Center(child: CircularProgressIndicator());
+              case GetDataUserError(:final message):
+                return Center(child: Text('Error: $message'));
+              case GetDataUserLoaded(:final users):
+                return ListView.builder(
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    final user = users[index];
+                    return ListTile(
+                      leading: CircleAvatar(
+                        child: Text(user.username[0].toUpperCase()),
+                      ),
+                      title: Text(user.fullName),
+                      subtitle: Text(user.email),
+                      trailing: user.isActive
+                          ? Icon(Icons.check_circle, color: Colors.green)
+                          : Icon(Icons.cancel, color: Colors.red),
+                    );
+                  },
+                );
             }
-
-            if (state is GetDataUserError) {
-              return Center(child: Text('Error: ${state.message}'));
-            }
-
-            if (state is GetDataUserLoaded) {
-              return ListView.builder(
-                itemCount: state.users.length,
-                itemBuilder: (context, index) {
-                  final user = state.users[index];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      child: Text(user.username[0].toUpperCase()),
-                    ),
-                    title: Text(user.fullName),
-                    subtitle: Text(user.email),
-                    trailing: user.isActive
-                        ? Icon(Icons.check_circle, color: Colors.green)
-                        : Icon(Icons.cancel, color: Colors.red),
-                  );
-                },
-              );
-            }
-
             return Center(child: Text('No data'));
           },
         ),
