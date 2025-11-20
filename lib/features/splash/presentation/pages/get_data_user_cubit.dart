@@ -410,7 +410,7 @@ class GetDataUserCubit extends Cubit<GetDataUserState> {
       //  QueryBuilder groupWhere(Function(QueryBuilder qb) conditions)
       final results = await _dbHelper.table('users').groupWhere((qb) {
         qb.where('is_active', 1);
-        qb.orWhere('is_verified', 0);
+        qb.orWhere('is_verified', 1);
       }).get();
       final users = results.map((userMap) => User.fromMap(userMap)).toList();
       emit(GetDataUserLoaded(users));
