@@ -1,8 +1,12 @@
 // lib/features/users/presentation/cubit/get_data_user_cubit.dart
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/database/db_helper.dart';
+import 'admin_model.dart';
 import 'user_model.dart';
 
 // الكيوبت المسؤول عن جلب بيانات المستخدمين من قاعدة البيانات بئكثر من طريقة
@@ -421,6 +425,82 @@ class GetDataUserCubit extends Cubit<GetDataUserState> {
     }
   }
 
+  // بدون اي تعقيد ابني ليا فنكشن  تسجيل دخول للمستخدم بناءً على الايميل والباسورد
+  Future<void> loginUser(String email, String password) async {
+    try {
+      emit(GetDataUserLoading());
+      final userMap = await _dbHelper
+          .table('users')
+          .where('email', email)
+          .where('password', password)
+          .first();
+
+      if (userMap != null) {
+        final user = User.fromMap(userMap);
+        emit(GetDataUserLoaded([user]));
+      } else {
+        emit(GetDataUserError('Invalid email or password'));
+      }
+    } catch (e) {
+      emit(GetDataUserError('Failed to login user: $e'));
+    }
+  }
+
+  // دالة لتسجيل دخول الأدمن
+  Future<void> loginAdmin(String email, String password) async {
+    try {
+      emit(GetDataUserLoading()); // أو أي state لديك
+
+      // 1. تشفير الباسورد المدخل
+      final hashedPassword = _hashPassword(password);
+
+      // 2. البحث عن الأدمن في قاعدة البيانات
+      final adminMap = await _dbHelper
+          .table('admins')
+          .where('email', email)
+          .where('password_hash', hashedPassword)
+          .where('is_active', 1)
+          .first();
+
+      if (adminMap != null) {
+        // 3. تحويل البيانات إلى مودل
+        final admin = Admin.fromMap(adminMap);
+
+        if (admin.isActive != 1) {
+          emit(GetDataUserError('البريد الإلكتروني أو كلمة المرور غير صحيحة'));
+        }
+
+        // 4. تحديث وقت آخر تسجيل دخول (اختياري)
+        await _updateLastLogin(admin.id);
+
+        emit(GetDataUserLoaded([admin]));
+      } else {
+        emit(GetDataUserError('البريد الإلكتروني أو كلمة المرور غير صحيحة'));
+      }
+    } catch (e) {
+      emit(GetDataUserError('فشل في تسجيل الدخول: $e'));
+    }
+  }
+
+  // دالة التشفير (نفس المستخدمة في الميجرايشن)
+  String _hashPassword(String password) {
+    final bytes = utf8.encode(password);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  // تحديث وقت آخر تسجيل دخول
+  Future<void> _updateLastLogin(int adminId) async {
+    try {
+      await _dbHelper.table('admins').where('id', adminId).update({
+        'last_login_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
+      });
+    } catch (e) {
+      print('⚠️ Failed to update last login: $e');
+    }
+  }
+
   // تحديث State
   void reset() {
     emit(GetDataUserInitial());
@@ -434,7 +514,7 @@ class GetDataUserInitial extends GetDataUserState {}
 class GetDataUserLoading extends GetDataUserState {}
 
 class GetDataUserLoaded extends GetDataUserState {
-  final List<User> users;
+  final List<dynamic> users;
   GetDataUserLoaded(this.users);
 }
 

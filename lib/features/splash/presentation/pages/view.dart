@@ -14,34 +14,51 @@ class SplashView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Users')),
       body: BlocBuilder<GetDataUserCubit, GetDataUserState>(
-        bloc: bloc..getActiveUsers(),
+        bloc: bloc,
         builder: (context, state) {
-          switch (state) {
-            case GetDataUserInitial():
-              return Center(child: Text('Please wait...'));
-            case GetDataUserLoading():
-              return Center(child: CircularProgressIndicator());
-            case GetDataUserError(:final message):
-              return Center(child: Text('Error: $message'));
-            case GetDataUserLoaded(:final users):
-              return ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  final user = users[index];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      child: Text(user.username[0].toUpperCase()),
-                    ),
-                    title: Text(user.fullName),
-                    subtitle: Text(user.email),
-                    trailing: user.isActive
-                        ? Icon(Icons.check_circle, color: Colors.green)
-                        : Icon(Icons.cancel, color: Colors.red),
-                  );
-                },
-              );
-          }
-          return Center(child: Text('No data'));
+          return TextButton(
+            onPressed: () {
+              bloc.loginAdmin("admin@admin.com", "1234567");
+            },
+            child: Text('Details'),
+          );
+          // switch (state) {
+          //   case GetDataUserInitial():
+          //     return Center(child: Text('Please wait...'));
+          //   case GetDataUserLoading():
+          //     return Center(child: CircularProgressIndicator());
+          //   case GetDataUserError(:final message):
+          //     return Center(child: Text('Error: $message'));
+          //   case GetDataUserLoaded(:final users):
+          //     return ListView.builder(
+          //       itemCount: users.length,
+          //       itemBuilder: (context, index) {
+          //         final user = users[index];
+          //         return Column(
+          //           children: [
+          //             // ListTile(
+          //             //   leading: CircleAvatar(
+          //             //     child: Text(user.username[0].toUpperCase()),
+          //             //   ),
+          //             //   title: Text(user.fullName),
+          //             //   subtitle: Text(user.email),
+          //             //   trailing: user.isActive
+          //             //       ? Icon(Icons.check_circle, color: Colors.green)
+          //             //       : Icon(Icons.cancel, color: Colors.red),
+          //             // ),
+          //             Divider(),
+          //             TextButton(
+          //               onPressed: () {
+          //                 bloc.loginAdmin("admin@admin.com", "1234567");
+          //               },
+          //               child: Text('Details'),
+          //             ),
+          //           ],
+          //         );
+          //       },
+          //     );
+          // }
+          // return Center(child: Text('No data'));
         },
       ),
     );
