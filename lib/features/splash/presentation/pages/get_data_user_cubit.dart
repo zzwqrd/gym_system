@@ -84,6 +84,24 @@ class GetDataUserCubit extends Cubit<GetDataUserState> {
     }
   }
 
+  // جلب المستخدمين غير النشطين فقط
+  Future<void> getInactiveUsers() async {
+    try {
+      emit(GetDataUserLoading());
+
+      final results = await _dbHelper
+          .table('users')
+          .where('is_active', 0)
+          .get();
+
+      final users = results.map((userMap) => User.fromMap(userMap)).toList();
+
+      emit(GetDataUserLoaded(users));
+    } catch (e) {
+      emit(GetDataUserError('Failed to load inactive users: $e'));
+    }
+  }
+
   // تحديث State
   void reset() {
     emit(GetDataUserInitial());
