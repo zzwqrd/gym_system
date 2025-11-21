@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gym_system/core/ui/complete_flutter_extensions.dart';
 
 import '../core/routes/app_routes_fun.dart';
+import '../core/ui/ui_extensions/complete_flutter_extensions.dart'
+    show AppTextStyles;
 
 class MyTextApp extends StatelessWidget {
   final String title;

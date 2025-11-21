@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gym_system/core/ui/ui_extensions/style_extensions_mor.dart';
 
 import '../../../../di/service_locator.dart';
 import 'get_data_user_cubit.dart';
 
 @visibleForTesting
-class SplashView extends StatelessWidget {
-  const SplashView({super.key});
+class TestView extends StatelessWidget {
+  const TestView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class SplashView extends StatelessWidget {
             onPressed: () {
               bloc.loginAdmin("admin@admin.com", "1234567");
             },
-            child: Text('Details'),
+            child: 'Details'.h1(),
           );
           // switch (state) {
           //   case GetDataUserInitial():

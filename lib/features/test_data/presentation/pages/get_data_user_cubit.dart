@@ -466,10 +466,6 @@ class GetDataUserCubit extends Cubit<GetDataUserState> {
         // 3. تحويل البيانات إلى مودل
         final admin = Admin.fromMap(adminMap);
 
-        if (admin.isActive != 1) {
-          emit(GetDataUserError('البريد الإلكتروني أو كلمة المرور غير صحيحة'));
-        }
-
         // 4. تحديث وقت آخر تسجيل دخول (اختياري)
         await _updateLastLogin(admin.id);
 

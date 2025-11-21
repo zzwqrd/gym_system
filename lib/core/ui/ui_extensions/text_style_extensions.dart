@@ -94,28 +94,14 @@ extension TextStyleExtensions on TextStyle {
     Color color = Colors.black54,
     double blurRadius = 2.0,
     Offset offset = const Offset(1, 1),
-  }) =>
-      copyWith(
-        shadows: [
-          Shadow(
-            color: color,
-            blurRadius: blurRadius,
-            offset: offset,
-          ),
-        ],
-      );
+  }) => copyWith(
+    shadows: [Shadow(color: color, blurRadius: blurRadius, offset: offset)],
+  );
 
-  TextStyle withGlow({
-    Color color = Colors.white,
-    double blurRadius = 10.0,
-  }) =>
+  TextStyle withGlow({Color color = Colors.white, double blurRadius = 10.0}) =>
       copyWith(
         shadows: [
-          Shadow(
-            color: color,
-            blurRadius: blurRadius,
-            offset: Offset.zero,
-          ),
+          Shadow(color: color, blurRadius: blurRadius, offset: Offset.zero),
         ],
       );
 
@@ -151,42 +137,33 @@ extension TextStyleExtensions on TextStyle {
 
   // Display Styles
   TextStyle get display => copyWith(
-        fontSize: 57,
-        fontWeight: FontWeight.w400,
-        height: 1.12,
-        letterSpacing: -0.25,
-      );
+    fontSize: 57,
+    fontWeight: FontWeight.w400,
+    height: 1.12,
+    letterSpacing: -0.25,
+  );
 
-  TextStyle get headline => copyWith(
-        fontSize: 32,
-        fontWeight: FontWeight.w400,
-        height: 1.25,
-      );
+  TextStyle get headline =>
+      copyWith(fontSize: 32, fontWeight: FontWeight.w400, height: 1.25);
 
-  TextStyle get title => copyWith(
-        fontSize: 22,
-        fontWeight: FontWeight.w400,
-        height: 1.27,
-      );
+  TextStyle get title =>
+      copyWith(fontSize: 22, fontWeight: FontWeight.w400, height: 1.27);
 
   TextStyle get body => copyWith(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        height: 1.5,
-        letterSpacing: 0.5,
-      );
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    letterSpacing: 0.5,
+  );
 
   TextStyle get label => copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        height: 1.43,
-        letterSpacing: 0.1,
-      );
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    height: 1.43,
+    letterSpacing: 0.1,
+  );
   // إضافة الدعم للغة العربية
-  TextStyle get arabicOptimized => copyWith(
-        letterSpacing: 0,
-        height: 1.6,
-      );
+  TextStyle get arabicOptimized => copyWith(letterSpacing: 0, height: 1.6);
 
   // إضافة textAlign (كانت ناقصة)
   TextStyle withTextAlign(TextAlign align) => copyWith();
@@ -201,20 +178,17 @@ extension TextStyleExtensions on TextStyle {
 // إضافة إكسنتشنز النصوص العربية
 extension ArabicTextExtensions on String {
   Text get arabicText => Text(
-        this,
-        textDirection: TextDirection.rtl,
-        style: const TextStyle(fontFamily: 'Cairo'),
-      );
+    this,
+    textDirection: TextDirection.rtl,
+    style: const TextStyle(fontFamily: 'Cairo'),
+  );
 }
 
 // إكسنتشن Directionality للنصوص العربية
 extension DirectionalityExtensions on Widget {
   Widget withDirectionality(BuildContext context) {
     final direction = Directionality.of(context);
-    return Directionality(
-      textDirection: direction,
-      child: this,
-    );
+    return Directionality(textDirection: direction, child: this);
   }
 }
 
@@ -244,47 +218,39 @@ extension TextStyleContext on BuildContext {
   TextStyle get labelSmall => textTheme.labelSmall ?? const TextStyle();
 
   // Custom Semantic Styles
-  TextStyle get buttonText => labelLarge.copyWith(
-        fontWeight: FontWeight.w500,
-        letterSpacing: 1.25,
-      );
+  TextStyle get buttonText =>
+      labelLarge.copyWith(fontWeight: FontWeight.w500, letterSpacing: 1.25);
 
   TextStyle get captionText => bodySmall.copyWith(
-        color: Theme.of(this).colorScheme.onSurface.withOpacity(0.6),
-      );
+    color: Theme.of(this).colorScheme.onSurface.withOpacity(0.6),
+  );
 
-  TextStyle get overlineText => labelSmall.copyWith(
-        letterSpacing: 1.5,
-        fontWeight: FontWeight.w500,
-      );
+  TextStyle get overlineText =>
+      labelSmall.copyWith(letterSpacing: 1.5, fontWeight: FontWeight.w500);
 
   // Error and Success Styles
-  TextStyle get errorText => bodySmall.copyWith(
-        color: Theme.of(this).colorScheme.error,
-      );
+  TextStyle get errorText =>
+      bodySmall.copyWith(color: Theme.of(this).colorScheme.error);
 
-  TextStyle get successText => bodySmall.copyWith(
-        color: const Color(0xFF4CAF50),
-      );
+  TextStyle get successText =>
+      bodySmall.copyWith(color: const Color(0xFF4CAF50));
 
-  TextStyle get warningText => bodySmall.copyWith(
-        color: const Color(0xFFFF9800),
-      );
+  TextStyle get warningText =>
+      bodySmall.copyWith(color: const Color(0xFFFF9800));
 
-  TextStyle get infoText => bodySmall.copyWith(
-        color: Theme.of(this).colorScheme.primary,
-      );
+  TextStyle get infoText =>
+      bodySmall.copyWith(color: Theme.of(this).colorScheme.primary);
 
   // Link Styles
   TextStyle get linkText => bodyMedium.copyWith(
-        color: Theme.of(this).colorScheme.primary,
-        decoration: TextDecoration.underline,
-      );
+    color: Theme.of(this).colorScheme.primary,
+    decoration: TextDecoration.underline,
+  );
 
   TextStyle get visitedLinkText => bodyMedium.copyWith(
-        color: Theme.of(this).colorScheme.primary.withOpacity(0.7),
-        decoration: TextDecoration.underline,
-      );
+    color: Theme.of(this).colorScheme.primary.withOpacity(0.7),
+    decoration: TextDecoration.underline,
+  );
 }
 
 /// String Extensions for Text Styling
@@ -294,18 +260,30 @@ extension StringTextStyle on String {
 
   // Quick Text Widgets
   Text get text => Text(this);
-  Text get h1 => Text(this,
-      style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold));
-  Text get h2 => Text(this,
-      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold));
-  Text get h3 => Text(this,
-      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600));
-  Text get h4 => Text(this,
-      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600));
-  Text get h5 => Text(this,
-      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500));
-  Text get h6 => Text(this,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500));
+  Text get h1 => Text(
+    this,
+    style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+  );
+  Text get h2 => Text(
+    this,
+    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+  );
+  Text get h3 => Text(
+    this,
+    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+  );
+  Text get h4 => Text(
+    this,
+    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+  );
+  Text get h5 => Text(
+    this,
+    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+  );
+  Text get h6 => Text(
+    this,
+    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+  );
 
   Text get body => Text(this, style: const TextStyle(fontSize: 16));
   Text get caption =>
@@ -339,23 +317,22 @@ extension StringTextStyle on String {
     TextAlign? textAlign,
     int? maxLines,
     TextOverflow? overflow,
-  }) =>
-      Text(
-        this,
-        style: TextStyle(
-          color: color,
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          fontStyle: fontStyle,
-          decoration: decoration,
-          letterSpacing: letterSpacing,
-          height: height,
-          fontFamily: fontFamily,
-        ),
-        textAlign: textAlign,
-        maxLines: maxLines,
-        overflow: overflow,
-      );
+  }) => Text(
+    this,
+    style: TextStyle(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      fontStyle: fontStyle,
+      decoration: decoration,
+      letterSpacing: letterSpacing,
+      height: height,
+      fontFamily: fontFamily,
+    ),
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+  );
 }
 
 /// Predefined Text Styles

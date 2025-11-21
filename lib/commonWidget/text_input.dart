@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym_system/core/ui/box_extensions.dart';
+import 'package:gym_system/core/ui/ui_extensions/input_decoration_extensions.dart'
+    show InputDecorationExtension;
+
+import '../core/app_styles.dart';
+import '../core/ui/ui_extensions/complete_flutter_extensions.dart'
+    show WidgetExtensions;
 
 class AppCustomForm extends StatefulWidget {
   final String? hintText, title, helperText;
@@ -300,8 +305,7 @@ class _AppCustomFormState extends State<AppCustomForm> {
             disabledBorder:
                 widget.border ?? _buildBorder(theme, disabled: true),
             errorMaxLines: 2,
-          ),
-          // .applyInputDecorationTheme(AppTypography.inputDecorationTheme),
+          ).applyInputDecorationTheme(AppStyles.inputDecorationTheme),
         ),
         // if (widget.errorText != null && widget.errorText!.isNotEmpty)
         //   Padding(

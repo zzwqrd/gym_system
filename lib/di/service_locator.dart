@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 
-import '../features/splash/presentation/pages/get_data_user_cubit.dart';
+import '../features/test_data/presentation/pages/get_data_user_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
