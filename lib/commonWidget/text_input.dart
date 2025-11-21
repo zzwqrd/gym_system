@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym_system/core/ui/ui_extensions/input_decoration_extensions.dart'
+import 'package:gym_system/core/utils/ui_extensions/input_decoration_extensions.dart'
     show InputDecorationExtension;
 
-import '../core/app_styles.dart';
-import '../core/ui/ui_extensions/complete_flutter_extensions.dart'
+import '../core/utils/app_styles.dart';
+import '../core/utils/ui_extensions/complete_flutter_extensions.dart'
     show WidgetExtensions;
 
 class AppCustomForm extends StatefulWidget {

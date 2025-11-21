@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'app.dart';
 import 'app_initializer.dart';
-import 'core/ui/loger.dart';
+import 'core/utils/loger.dart';
 
 final logger = LoggerDebug(headColor: LogColors.green);
 

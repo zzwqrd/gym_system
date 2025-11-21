@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-import 'loger.dart';
+import '../utils/loger.dart';
 
 class AppBlocObserver extends BlocObserver {
   LoggerDebug log = LoggerDebug(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/ui/ui_extensions/box_extensions.dart' show BoxExtensions;
+import '../../core/utils/ui_extensions/box_extensions.dart' show BoxExtensions;
 import '../../gen/assets.gen.dart';
 
 class LoadingBtn extends StatelessWidget {

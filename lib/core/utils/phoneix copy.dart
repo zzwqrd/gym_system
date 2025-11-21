@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:toastification/toastification.dart';
 
 class Phoenix extends StatefulWidget {
   const Phoenix({super.key, required this.child});
@@ -25,11 +24,6 @@ class _PhoenixState extends State<Phoenix> {
 
   @override
   Widget build(BuildContext context) {
-    return ToastificationWrapper(
-      child: KeyedSubtree(
-        key: key,
-        child: widget.child,
-      ),
-    );
+    return KeyedSubtree(key: key, child: widget.child);
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_system/core/routes/app_routes_fun.dart';
-import 'package:gym_system/core/ui/ui_extensions/color_extensions.dart';
+import 'package:gym_system/core/utils/ui_extensions/color_extensions.dart';
 
 class AppStyles {
   /// Large Text Style

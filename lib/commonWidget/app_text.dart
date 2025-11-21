@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../core/routes/app_routes_fun.dart';
-import '../core/ui/ui_extensions/complete_flutter_extensions.dart'
+import '../core/utils/ui_extensions/complete_flutter_extensions.dart'
     show AppTextStyles;
 
 class MyTextApp extends StatelessWidget {

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../commonWidget/button_animation/loading_app.dart';
-import '../../core/ui/ui_extensions/complete_flutter_extensions.dart'
+import '../../core/utils/ui_extensions/complete_flutter_extensions.dart'
     show AppColors;
-import '../../core/ui/ui_extensions/style_extensions_mor.dart'
+import '../../core/utils/ui_extensions/style_extensions_mor.dart'
     show AppTextStyles;
 import '../app_text.dart';
 import 'button_animation.dart';

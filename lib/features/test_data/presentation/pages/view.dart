@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gym_system/core/ui/ui_extensions/style_extensions_mor.dart';
+import 'package:gym_system/core/utils/ui_extensions/style_extensions_mor.dart';
 
 import '../../../../di/service_locator.dart';
 import 'get_data_user_cubit.dart';

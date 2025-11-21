@@ -8,8 +8,8 @@ import 'package:gym_system/core/routes/routes.dart';
 
 import 'core/routes/app_routes.dart';
 import 'core/routes/app_routes_fun.dart';
-import 'core/ui/phoneix.dart';
-import 'core/ui/unfucs.dart';
+import 'core/utils/phoneix.dart';
+import 'core/utils/unfucs.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

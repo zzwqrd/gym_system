@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gym_system/core/ui/ui_extensions/box_extensions.dart';
-import 'package:gym_system/core/ui/ui_extensions/complete_flutter_extensions.dart'
+import 'package:gym_system/core/utils/ui_extensions/box_extensions.dart';
+import 'package:gym_system/core/utils/ui_extensions/complete_flutter_extensions.dart'
     show StringExtensions, NumExtensions;
 
 import '../../../../di/service_locator.dart';
