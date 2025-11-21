@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_system/core/routes/routes.dart';
 
 import 'core/routes/app_routes.dart';
 import 'core/routes/app_routes_fun.dart';
@@ -27,8 +28,8 @@ class _MyAppState extends State<MyApp> {
       builder: (_, Widget? child) {
         return MaterialApp(
           title: 'SQLite Manager',
-          initialRoute: AppRoutes.init.initial,
-          routes: AppRoutes.init.appRoutes,
+          initialRoute: RouteNames.splash,
+          onGenerateRoute: AppRoutes.onGenerateRoute,
           navigatorKey: navigatorKey,
           navigatorObservers: <NavigatorObserver>[routeObserver],
           debugShowCheckedModeBanner: false,
