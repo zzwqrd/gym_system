@@ -43,31 +43,32 @@ class LoadingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: CustomButtonAnimation(
-        isAnimating: isAnimating, // تمرير isAnimating
-        onTap: onTap,
-        width: width ?? MediaQuery.of(context).size.width,
-        minWidth: 55.w,
-        height: height ?? 55.h,
-        color: color ?? context.primaryColor,
-        borderRadius: borderRadius ?? 50,
-        borderSide: BorderSide(
-          color:
-              borderColor ??
-              const Color.fromARGB(0, 255, 255, 255).withOpacity(0.0),
-          width: 1.w,
-        ),
-        loader: const LoadingBtn(),
-        child: MyTextApp(
-          title: title,
-          style: context.bodyMedium.copyWith(
-            color: textColor ?? Colors.white,
-            fontSize: fontSize ?? 16.sp,
-            fontFamily: fontFamily ?? 'Cairo',
-            fontWeight: fontWeight ?? FontWeight.w500,
-          ),
+    return CustomButtonAnimation(
+      isAnimating: isAnimating, // تمرير isAnimating
+      onTap: () {
+        if (isAnimating != true) {
+          onTap.call();
+        }
+      },
+      width: width ?? MediaQuery.of(context).size.width,
+      minWidth: 55.w,
+      height: height ?? 53.h,
+      color: color ?? context.primaryColor,
+      borderRadius: borderRadius ?? 10,
+      // borderSide: BorderSide(
+      //   color:
+      //       borderColor ??
+      //       const Color.fromARGB(0, 255, 255, 255).withOpacity(0.0),
+      //   width: 1.w,
+      // ),
+      loader: const LoadingBtn(),
+      child: MyTextApp(
+        title: title,
+        style: context.bodyMedium.copyWith(
+          color: textColor ?? Colors.white,
+          fontSize: fontSize ?? 16.sp,
+          fontFamily: fontFamily ?? 'Cairo',
+          fontWeight: fontWeight ?? FontWeight.w500,
         ),
       ),
     );
