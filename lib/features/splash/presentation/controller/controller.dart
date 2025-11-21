@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/routes/app_routes_fun.dart';
 import '../../../../core/routes/navigation.dart';
 import '../../../../core/routes/routes.dart';
+import '../../../../core/utils/enums.dart';
 import 'state.dart';
 
 class SplashController extends Cubit<SplashState> {
-  SplashController() : super(SplashInitial());
+  SplashController() : super(SplashState());
 
   Future<void> init() async {
     Future.delayed(Duration(seconds: 2), () async {
@@ -15,7 +16,7 @@ class SplashController extends Cubit<SplashState> {
         RouteNames.login,
         predicate: (Route<dynamic> route) => false,
       );
-      emit(SplashInitial());
+      emit(state.copyWith(requestState: RequestState.done));
     });
   }
 }
