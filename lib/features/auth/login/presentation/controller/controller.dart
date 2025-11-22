@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../commonWidget/toast_helper.dart';
 import '../../../../../core/database/db_helper.dart';
 import '../../../../../core/utils/enums.dart';
 import 'model.dart';
@@ -22,37 +22,41 @@ class LoginController extends Cubit<LoginState> {
   );
 
   Future<void> login() async {
-    try {
-      if (!formKey.currentState!.validate()) {
-        return;
-      }
-      formKey.currentState?.save();
-      emit(state.copyWith(requestState: RequestState.loading));
-      // 1. تشفير الباسورد المدخل
-      final hashedPassword = _hashPassword(loginModel.password);
+    if (!formKey.currentState!.validate()) return;
+    formKey.currentState?.save();
 
-      // 2. البحث عن الأدمن في قاعدة البيانات
-      final adminMap = await _dbHelper
-          .table('admins')
-          .where('email', loginModel.email)
-          .where('password_hash', hashedPassword)
-          .where('is_active', 1)
-          .first();
+    emit(state.copyWith(requestState: RequestState.loading));
 
-      if (adminMap != null) {
-        // 3. تحويل البيانات إلى مودل
-        final admin = Admin.fromMap(adminMap);
+    // السؤال المنطقي: "هل يمكن تسجيل الدخول؟"
+    final canLogin = await _dbHelper
+        .table('admins')
+        .where('email', loginModel.email)
+        .where('password_hash', _hashPassword(loginModel.password))
+        .where('is_active', 1)
+        .exists();
 
-        // 4. تحديث وقت آخر تسجيل دخول (اختياري)
-        await _updateLastLogin(admin.id);
-        log("🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵🪵 $admin");
-        emit(state.copyWith(requestState: RequestState.done));
-      } else {
-        emit(state.copyWith(requestState: RequestState.error));
-      }
-    } catch (e) {
+    if (!canLogin) {
+      FlashHelper.showToast(
+        'بيانات الدخول غير صحيحة',
+        type: MessageTypeTost.fail,
+      );
       emit(state.copyWith(requestState: RequestState.error));
+      return;
     }
+
+    // التنفيذ المنطقي
+    final admin = await _dbHelper
+        .table('admins')
+        .where('email', loginModel.email)
+        .first()
+        .then((map) => Admin.fromMap(map!));
+
+    await _updateLastLogin(admin.id);
+    FlashHelper.showToast(
+      'مرحباً بك ${admin.name}',
+      type: MessageTypeTost.success,
+    );
+    emit(state.copyWith(requestState: RequestState.done));
   }
 
   // دالة التشفير (نفس المستخدمة في الميجرايشن)

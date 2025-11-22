@@ -19,7 +19,9 @@ dependencies:
   sqflite: ^2.4.2
   easy_localization: ^3.0.8
   flutter_screenutil: ^5.9.3
-  toastification: ^3.0.3
+  # toastification: ^3.0.3
+  # fluttertoast: ^8.2.4
+  flash: ^3.1.1
   path_provider: ^2.1.5
   equatable: ^2.0.7
   lottie:
