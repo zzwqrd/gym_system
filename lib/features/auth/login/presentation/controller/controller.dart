@@ -24,22 +24,18 @@ class LoginController extends Cubit<LoginState> {
     password: "1234567".trim(),
   );
 
-  // 1. أولاً: دالة تسجيل الدخول السهلة
   Future<HelperResponse<Admin>> loginEasy() async {
-    // تحقق من صحة البيانات
     if (!formKey.currentState!.validate()) {
       return HelperResponse.validationError(message: 'البيانات غير صحيحة');
     }
     formKey.currentState?.save();
 
     try {
-      // البحث عن الأدمن بالإيميل
       final adminMap = await _dbHelper
           .table('admins')
           .where('email', loginModel.email)
           .first();
 
-      // إذا ما لقيناش الحساب
       if (adminMap == null) {
         return HelperResponse.notFound(message: 'مافيش حساب بهذا الإيميل');
       }
@@ -87,15 +83,11 @@ class LoginController extends Cubit<LoginState> {
     return digest.toString();
   }
 
-  // 4. الاستخدام في الكيوبيت - سهل
   Future<void> loginUser() async {
-    // نبدأ التحميل
     emit(state.copyWith(requestState: RequestState.loading));
 
-    // نستدعي الدالة
     final response = await loginEasy();
 
-    // نتعامل مع النتيجة باستخدام when السهل
     response.when(
       success: (admin) {
         // نحفظ التوكن
