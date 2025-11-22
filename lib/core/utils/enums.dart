@@ -48,8 +48,26 @@ enum ResponseState {
   error,
   notFound,
   validationError,
-  unauthorized,
+  unauthorized;
+
+  bool get isSuccess => this == ResponseState.success;
+  bool get isLoading => this == ResponseState.loading;
+  bool get isInitial => this == ResponseState.initial;
+  bool get isError => this == ResponseState.error;
+  bool get isNotFound => this == ResponseState.notFound;
+  bool get isValidationError => this == ResponseState.validationError;
+  bool get isUnauthorized => this == ResponseState.unauthorized;
 }
 
 /// Simplified error types
-enum ErrorRequestType { notFound, validationError, unauthorized, unknown }
+enum ErrorRequestType {
+  notFound,
+  validationError,
+  unauthorized,
+  unknown;
+
+  bool get isNotFound => this == ErrorRequestType.notFound;
+  bool get isValidationError => this == ErrorRequestType.validationError;
+  bool get isUnauthorized => this == ErrorRequestType.unauthorized;
+  bool get isUnknown => this == ErrorRequestType.unknown;
+}
