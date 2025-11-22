@@ -86,33 +86,53 @@ class QueryBuilder {
   }
 
   QueryBuilder whereRaw(String rawWhere, [List<dynamic>? bindings]) {
-    _whereClauses.add(WhereClause(
-        '', 'RAW', {'query': rawWhere, 'bindings': bindings ?? []}, 'AND'));
+    _whereClauses.add(
+      WhereClause('', 'RAW', {
+        'query': rawWhere,
+        'bindings': bindings ?? [],
+      }, 'AND'),
+    );
     return this;
   }
 
   QueryBuilder orWhereRaw(String rawWhere, [List<dynamic>? bindings]) {
-    _whereClauses.add(WhereClause(
-        '', 'RAW', {'query': rawWhere, 'bindings': bindings ?? []}, 'OR'));
+    _whereClauses.add(
+      WhereClause('', 'RAW', {
+        'query': rawWhere,
+        'bindings': bindings ?? [],
+      }, 'OR'),
+    );
     return this;
   }
 
   // ========== JOIN CLAUSES ========== //
 
   QueryBuilder join(
-      String table, String first, String operator, String second) {
+    String table,
+    String first,
+    String operator,
+    String second,
+  ) {
     _joinClauses.add(JoinClause(table, first, operator, second, 'INNER'));
     return this;
   }
 
   QueryBuilder leftJoin(
-      String table, String first, String operator, String second) {
+    String table,
+    String first,
+    String operator,
+    String second,
+  ) {
     _joinClauses.add(JoinClause(table, first, operator, second, 'LEFT'));
     return this;
   }
 
   QueryBuilder rightJoin(
-      String table, String first, String operator, String second) {
+    String table,
+    String first,
+    String operator,
+    String second,
+  ) {
     _joinClauses.add(JoinClause(table, first, operator, second, 'RIGHT'));
     return this;
   }
@@ -182,21 +202,19 @@ class QueryBuilder {
   }
 
   // ========== GroupWhere ========== //
-  QueryBuilder groupWhere(void Function(QueryBuilder builder) group,
-      {String boolean = 'AND'}) {
+  QueryBuilder groupWhere(
+    void Function(QueryBuilder builder) group, {
+    String boolean = 'AND',
+  }) {
     final groupBuilder = QueryBuilder(_db, _table);
     group(groupBuilder);
     final groupClause = groupBuilder._buildWhereClause();
 
     _whereClauses.add(
-      WhereClause(
-          '',
-          'RAW',
-          {
-            'query': '(${groupClause.query})',
-            'bindings': groupClause.args,
-          },
-          boolean),
+      WhereClause('', 'RAW', {
+        'query': '(${groupClause.query})',
+        'bindings': groupClause.args,
+      }, boolean),
     );
 
     return this;
@@ -241,8 +259,10 @@ class QueryBuilder {
 
   Future<int> count([String column = '*']) async {
     try {
-      final result =
-          await _db.rawQuery(_buildCountQuery(column), _buildWhereArgs());
+      final result = await _db.rawQuery(
+        _buildCountQuery(column),
+        _buildWhereArgs(),
+      );
       _resetQuery();
       return Sqflite.firstIntValue(result) ?? 0;
     } catch (e) {
@@ -255,7 +275,9 @@ class QueryBuilder {
   Future<double> sum(String column) async {
     try {
       final result = await _db.rawQuery(
-          _buildAggregateQuery('SUM', column), _buildWhereArgs());
+        _buildAggregateQuery('SUM', column),
+        _buildWhereArgs(),
+      );
       _resetQuery();
       return (result.first.values.first as num?)?.toDouble() ?? 0.0;
     } catch (e) {
@@ -267,7 +289,9 @@ class QueryBuilder {
   Future<double> avg(String column) async {
     try {
       final result = await _db.rawQuery(
-          _buildAggregateQuery('AVG', column), _buildWhereArgs());
+        _buildAggregateQuery('AVG', column),
+        _buildWhereArgs(),
+      );
       _resetQuery();
       return (result.first.values.first as num?)?.toDouble() ?? 0.0;
     } catch (e) {
@@ -279,7 +303,9 @@ class QueryBuilder {
   Future<T?> max<T>(String column) async {
     try {
       final result = await _db.rawQuery(
-          _buildAggregateQuery('MAX', column), _buildWhereArgs());
+        _buildAggregateQuery('MAX', column),
+        _buildWhereArgs(),
+      );
       _resetQuery();
       return result.first.values.first as T?;
     } catch (e) {
@@ -291,7 +317,9 @@ class QueryBuilder {
   Future<T?> min<T>(String column) async {
     try {
       final result = await _db.rawQuery(
-          _buildAggregateQuery('MIN', column), _buildWhereArgs());
+        _buildAggregateQuery('MIN', column),
+        _buildWhereArgs(),
+      );
       _resetQuery();
       return result.first.values.first as T?;
     } catch (e) {
@@ -320,8 +348,11 @@ class QueryBuilder {
 
   Future<int> insertOrIgnore(Map<String, dynamic> values) async {
     try {
-      return await _db.insert(_table, values,
-          conflictAlgorithm: ConflictAlgorithm.ignore);
+      return await _db.insert(
+        _table,
+        values,
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
     } catch (e) {
       print('❌ Insert or ignore failed: $e');
       rethrow;
@@ -330,8 +361,11 @@ class QueryBuilder {
 
   Future<int> insertOrReplace(Map<String, dynamic> values) async {
     try {
-      return await _db.insert(_table, values,
-          conflictAlgorithm: ConflictAlgorithm.replace);
+      return await _db.insert(
+        _table,
+        values,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     } catch (e) {
       print('❌ Insert or replace failed: $e');
       rethrow;
@@ -427,7 +461,8 @@ class QueryBuilder {
         query.write(' CROSS JOIN ${join.table}');
       } else {
         query.write(
-            ' ${join.type} JOIN ${join.table} ON ${join.first} ${join.operator} ${join.second}');
+          ' ${join.type} JOIN ${join.table} ON ${join.first} ${join.operator} ${join.second}',
+        );
       }
     }
 
@@ -439,7 +474,8 @@ class QueryBuilder {
     // GROUP BY
     if (_groupByClauses.isNotEmpty) {
       query.write(
-          ' GROUP BY ${_groupByClauses.map((g) => g.column).join(', ')}');
+        ' GROUP BY ${_groupByClauses.map((g) => g.column).join(', ')}',
+      );
     }
 
     // HAVING
@@ -450,7 +486,8 @@ class QueryBuilder {
     // ORDER BY
     if (_orderByClauses.isNotEmpty) {
       query.write(
-          ' ORDER BY ${_orderByClauses.map((o) => o.direction.isEmpty ? o.column : '${o.column} ${o.direction}').join(', ')}');
+        ' ORDER BY ${_orderByClauses.map((o) => o.direction.isEmpty ? o.column : '${o.column} ${o.direction}').join(', ')}',
+      );
     }
 
     // LIMIT & OFFSET
@@ -474,7 +511,8 @@ class QueryBuilder {
         query.write(' CROSS JOIN ${join.table}');
       } else {
         query.write(
-            ' ${join.type} JOIN ${join.table} ON ${join.first} ${join.operator} ${join.second}');
+          ' ${join.type} JOIN ${join.table} ON ${join.first} ${join.operator} ${join.second}',
+        );
       }
     }
 
