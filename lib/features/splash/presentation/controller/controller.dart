@@ -19,6 +19,11 @@ class SplashController extends Cubit<SplashState> {
       if (pref.getString("admin_token") != null ||
           pref.getString("admin_token")!.trim().isNotEmpty) {
         FlashHelper.showToast('مرحباً بك ', type: MessageTypeTost.success);
+
+        await navigatorKey.currentContext!.pushNamedAndRemoveUntil(
+          RouteNames.mainLayout,
+          predicate: (Route<dynamic> route) => false,
+        );
       } else {
         await navigatorKey.currentContext!.pushNamedAndRemoveUntil(
           RouteNames.login,

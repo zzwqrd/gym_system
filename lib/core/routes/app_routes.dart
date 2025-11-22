@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_system/features/auth/login/presentation/pages/view.dart';
+import 'package:gym_system/features/layout/presentation/pages/view.dart';
 import 'package:gym_system/features/splash/presentation/pages/view.dart';
 
 import 'routes.dart';
@@ -23,7 +24,8 @@ class AppRoutes {
         return MaterialPageRoute<dynamic>(builder: (_) => const SplashView());
       case RouteNames.login:
         return MaterialPageRoute<dynamic>(builder: (_) => const LoginView());
-
+      case RouteNames.mainLayout:
+        return MaterialPageRoute<dynamic>(builder: (_) => const LayoutView());
       default:
         return MaterialPageRoute<dynamic>(builder: (_) => const SplashView());
     }
