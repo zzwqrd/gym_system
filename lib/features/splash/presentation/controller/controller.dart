@@ -16,12 +16,11 @@ class SplashController extends Cubit<SplashState> {
 
   Future<void> init() async {
     Future.delayed(Duration(seconds: 2), () async {
-      if (pref.getString("admin_token") != null ||
-          pref.getString("admin_token")!.trim().isNotEmpty) {
+      if (pref.getString("admin_token") != null) {
         FlashHelper.showToast('مرحباً بك ', type: MessageTypeTost.success);
 
         await navigatorKey.currentContext!.pushNamedAndRemoveUntil(
-          RouteNames.mainLayout,
+          RouteNames.login,
           predicate: (Route<dynamic> route) => false,
         );
       } else {
