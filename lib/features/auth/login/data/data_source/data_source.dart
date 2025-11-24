@@ -9,14 +9,14 @@ import '../model/model.dart';
 import '../model/send_data.dart';
 
 abstract class LoginDataSource {
-  Future<HelperResponse<Admin>> loginEasy(SendData loginModel);
+  Future<HelperResponse> loginEasy(SendData loginModel);
 }
 
 class LoginDataSourceImpl implements LoginDataSource {
   final _dbHelper = DBHelper();
 
   @override
-  Future<HelperResponse<Admin>> loginEasy(SendData loginModel) async {
+  Future<HelperResponse> loginEasy(SendData loginModel) async {
     try {
       final adminMap = await _dbHelper
           .table('admins')
