@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:gym_system/di/service_locator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/database/db_helper.dart';
 import '../../../../../core/database/helper_respons.dart';
@@ -15,8 +13,7 @@ abstract class LoginDataSource {
 }
 
 class LoginDataSourceImpl implements LoginDataSource {
-  final DBHelper _dbHelper = DBHelper();
-  final SharedPreferences pref = sl<SharedPreferences>();
+  final _dbHelper = DBHelper();
 
   @override
   Future<HelperResponse<Admin>> loginEasy(SendData loginModel) async {
