@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config/get_platform.dart' show pt, PlatformInfo, PTExt;
 import 'core/database/db_helper.dart';
@@ -24,7 +25,32 @@ class AppInitializer {
 
   Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await di.setupServiceLocator();
+    final Completer<void> completer = Completer<void>();
+    completer.complete();
+    final pref = di.sl<SharedPreferences>();
+    pref.clear(); // لمسح بيانات SharedPreferences أثناء التهيئة
+    final originalOnError = FlutterError.onError;
+    FlutterError.onError = (FlutterErrorDetails details) {
+      handleError(details.exception, details.stack ?? StackTrace.current);
+      originalOnError?.call(details);
+    };
 
+    // final zoneSpecification = ZoneSpecification(
+    //   handleUncaughtError:
+    //       (
+    //         Zone self,
+    //         ZoneDelegate parent,
+    //         Zone zone,
+    //         Object error,
+    //         StackTrace stackTrace,
+    //       ) {
+    //         handleError(error, stackTrace);
+    //       },
+    // );
+    // await Zone.current.fork(specification: zoneSpecification).run(() async {
+    //   return _futureInit();
+    // });
     HttpOverrides.global = MyHttpOverrides();
     final temporaryDirectory = await getTemporaryDirectory();
 
@@ -56,8 +82,6 @@ class AppInitializer {
       print('🪵 Stack trace: $stack');
     }
     await _init();
-
-    await di.setupServiceLocator();
 
     await EasyLocalization.ensureInitialized();
 

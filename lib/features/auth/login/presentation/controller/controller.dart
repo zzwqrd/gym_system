@@ -4,6 +4,9 @@ import 'package:gym_system/di/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../commonWidget/toast_helper.dart';
+import '../../../../../core/routes/app_routes_fun.dart';
+import '../../../../../core/routes/navigation.dart';
+import '../../../../../core/routes/routes.dart';
 import '../../../../../core/utils/enums.dart';
 import 'repository.dart';
 import 'send_data.dart';
@@ -13,7 +16,7 @@ class LoginController extends Cubit<LoginState> {
   LoginController() : super(LoginState());
   final formKey = GlobalKey<FormState>();
   final pref = sl<SharedPreferences>();
-  final LoginRepository _loginUseCase = LoginDataSourceImpl();
+  final LoginDataSource _loginUseCase = LoginDataSourceImpl();
   SendData loginModel = SendData(
     email: "admin@admin.com".trim(),
     password: "1234567".trim(),
@@ -29,13 +32,17 @@ class LoginController extends Cubit<LoginState> {
     final response = await _loginUseCase.loginEasy(loginModel);
 
     response.when(
-      success: (admin) {
+      success: (admin) async {
         // نحفظ التوكن
         pref.setString("admin_token", admin.token);
 
         // نظهر رسالة نجاح
         FlashHelper.showToast(response.message, type: MessageTypeTost.success);
-
+        // ننتقل للشاشة الرئيسية
+        await navigatorKey.currentContext!.pushNamedAndRemoveUntil(
+          RouteNames.mainLayout,
+          predicate: (Route<dynamic> route) => false,
+        );
         // نغير الحالة لنجاح
         emit(state.copyWith(requestState: RequestState.done));
       },
@@ -67,11 +74,16 @@ class LoginController extends Cubit<LoginState> {
         emit(state.copyWith(requestState: RequestState.error));
       },
       // إذا نجح
-      (admin) {
+      (admin) async {
         pref.setString("admin_token", admin.token);
         FlashHelper.showToast(
           'أهلاً بك ${admin.name}',
           type: MessageTypeTost.success,
+        );
+        // ننتقل للشاشة الرئيسية
+        await navigatorKey.currentContext!.pushNamedAndRemoveUntil(
+          RouteNames.mainLayout,
+          predicate: (Route<dynamic> route) => false,
         );
         emit(state.copyWith(requestState: RequestState.done));
       },

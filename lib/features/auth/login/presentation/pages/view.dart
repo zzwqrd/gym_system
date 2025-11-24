@@ -45,7 +45,7 @@ class LoginView extends StatelessWidget {
                   isAnimating: state.requestState.isLoading,
                   title: tr(LocaleKeys.auth_title),
                   onTap: () {
-                    bloc.loginUserWithEither();
+                    bloc.loginUser();
                   },
                 );
               },

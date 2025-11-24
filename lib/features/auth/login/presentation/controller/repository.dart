@@ -10,11 +10,11 @@ import '../../../../../core/utils/enums.dart';
 import 'model.dart';
 import 'send_data.dart';
 
-abstract class LoginRepository {
+abstract class LoginDataSource {
   Future<HelperResponse<Admin>> loginEasy(SendData loginModel);
 }
 
-class LoginDataSourceImpl implements LoginRepository {
+class LoginDataSourceImpl implements LoginDataSource {
   final DBHelper _dbHelper = DBHelper();
   final SharedPreferences pref = sl<SharedPreferences>();
 

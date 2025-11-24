@@ -20,7 +20,7 @@ class SplashController extends Cubit<SplashState> {
         FlashHelper.showToast('مرحباً بك ', type: MessageTypeTost.success);
 
         await navigatorKey.currentContext!.pushNamedAndRemoveUntil(
-          RouteNames.login,
+          RouteNames.mainLayout,
           predicate: (Route<dynamic> route) => false,
         );
       } else {
