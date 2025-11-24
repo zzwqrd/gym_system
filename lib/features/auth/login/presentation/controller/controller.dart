@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gym_system/di/service_locator.dart';
+import 'package:gym_system/features/auth/login/domin/usecases/usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../commonWidget/toast_helper.dart';
@@ -8,15 +9,14 @@ import '../../../../../core/routes/app_routes_fun.dart';
 import '../../../../../core/routes/navigation.dart';
 import '../../../../../core/routes/routes.dart';
 import '../../../../../core/utils/enums.dart';
-import 'repository.dart';
-import 'send_data.dart';
+import '../../data/model/send_data.dart';
 import 'state.dart';
 
 class LoginController extends Cubit<LoginState> {
   LoginController() : super(LoginState());
   final formKey = GlobalKey<FormState>();
   final pref = sl<SharedPreferences>();
-  final LoginDataSource _loginUseCase = LoginDataSourceImpl();
+  final LoginUsecase _loginUseCase = LoginUsecaseImpl();
   SendData loginModel = SendData(
     email: "admin@admin.com".trim(),
     password: "1234567".trim(),

@@ -117,12 +117,22 @@
 ├── 📁 features
 │   ├── 📁 auth
 │   │   └── 📁 login
+│   │       ├── 📁 data
+│   │       │   ├── 📁 data_source
+│   │       │   │   └── 📄 data_source.dart
+│   │       │   ├── 📁 model
+│   │       │   │   ├── 📄 model.dart
+│   │       │   │   └── 📄 send_data.dart
+│   │       │   └── 📁 repository_impl
+│   │       │       └── 📄 repository_impl.dart
+│   │       ├── 📁 domin
+│   │       │   ├── 📁 repositories
+│   │       │   │   └── 📄 repository.dart
+│   │       │   └── 📁 usecases
+│   │       │       └── 📄 usecase.dart
 │   │       └── 📁 presentation
 │   │           ├── 📁 controller
 │   │           │   ├── 📄 controller.dart
-│   │           │   ├── 📄 model.dart
-│   │           │   ├── 📄 repository.dart
-│   │           │   ├── 📄 send_data.dart
 │   │           │   └── 📄 state.dart
 │   │           └── 📁 pages
 │   │               └── 📄 view.dart

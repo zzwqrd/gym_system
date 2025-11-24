@@ -5,8 +5,8 @@ import 'package:crypto/crypto.dart';
 import '../../../../../core/database/db_helper.dart';
 import '../../../../../core/database/helper_respons.dart';
 import '../../../../../core/utils/enums.dart';
-import 'model.dart';
-import 'send_data.dart';
+import '../model/model.dart';
+import '../model/send_data.dart';
 
 abstract class LoginDataSource {
   Future<HelperResponse<Admin>> loginEasy(SendData loginModel);
