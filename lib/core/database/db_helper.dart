@@ -28,7 +28,9 @@ class DBHelper {
   Future<String> get databasePath async {
     final databasesPath = await getDatabasesPath();
     return join(
-        databasesPath, 'app_database.db'); // غيّر الاسم حسب اسم قاعدة بياناتك
+      databasesPath,
+      'app_database.db',
+    ); // غيّر الاسم حسب اسم قاعدة بياناتك
   }
 
   Future<Database> _initDatabase() async {
@@ -55,7 +57,7 @@ class DBHelper {
   // يتم تشغيله قبل أي معاملات - آمن للمفاتيح الخارجية
   Future<void> _onConfigure(Database db) async {
     try {
-      await db.execute('PRAGMA foreign_keys = ON');
+      await db.rawQuery('PRAGMA foreign_keys = ON');
       print('✅ Foreign keys enabled');
     } catch (e) {
       print('⚠️ Could not enable foreign keys: $e');
@@ -65,10 +67,10 @@ class DBHelper {
   // يتم تشغيله بعد فتح قاعدة البيانات - آمن لوضع WAL
   Future<void> _onOpen(Database db) async {
     try {
-      await db.execute('PRAGMA journal_mode = WAL');
-      await db.execute('PRAGMA synchronous = NORMAL');
-      await db.execute('PRAGMA cache_size = 10000');
-      await db.execute('PRAGMA temp_store = MEMORY');
+      await db.rawQuery('PRAGMA journal_mode = WAL');
+      await db.rawQuery('PRAGMA synchronous = NORMAL');
+      await db.rawQuery('PRAGMA cache_size = 10000');
+      await db.rawQuery('PRAGMA temp_store = MEMORY');
       print('✅ Database optimizations applied');
     } catch (e) {
       print('⚠️ Could not apply database optimizations: $e');
@@ -120,8 +122,10 @@ class DBHelper {
   }
 
   // Raw query methods
-  Future<List<Map<String, dynamic>>> rawQuery(String query,
-      [List<dynamic>? arguments]) async {
+  Future<List<Map<String, dynamic>>> rawQuery(
+    String query, [
+    List<dynamic>? arguments,
+  ]) async {
     final db = await database;
     return await db.rawQuery(query, arguments);
   }
@@ -178,7 +182,8 @@ class DBHelper {
   Future<List<String>> getTableNames() async {
     final db = await database;
     final result = await db.rawQuery(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
+      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'",
+    );
     return result.map((row) => row['name'] as String).toList();
   }
 }

@@ -17,6 +17,8 @@ import 'routes.dart';
 //   };
 // }
 
+import 'package:gym_system/features/auth/register/presentation/pages/view.dart';
+
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -24,6 +26,8 @@ class AppRoutes {
         return MaterialPageRoute<dynamic>(builder: (_) => const SplashView());
       case RouteNames.login:
         return MaterialPageRoute<dynamic>(builder: (_) => const LoginView());
+      case RouteNames.register:
+        return MaterialPageRoute<dynamic>(builder: (_) => const RegisterView());
       case RouteNames.mainLayout:
         return MaterialPageRoute<dynamic>(builder: (_) => const LayoutView());
       default:

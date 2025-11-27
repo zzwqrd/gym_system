@@ -9,7 +9,11 @@ import 'package:gym_system/gen/locale_keys.g.dart';
 
 import '../../../../../commonWidget/app_field.dart';
 import '../../../../../commonWidget/button_animation/LoadingButton.dart';
+import '../../../../../core/routes/app_routes_fun.dart';
+import '../../../../../core/routes/navigation.dart';
+import '../../../../../core/routes/routes.dart';
 import '../../../../../core/utils/ui_extensions/extensions_init.dart';
+
 import '../../../../../gen/assets.gen.dart';
 import '../controller/controller.dart';
 
@@ -48,7 +52,21 @@ class LoginView extends StatelessWidget {
                   },
                 );
               },
-            ),
+            ).pb4,
+            Row(
+              children: [
+                Expanded(child: Divider(color: Colors.grey.shade300)),
+                "سجل الآن" // يمكن استبدالها بـ tr(LocaleKeys.auth_register_now) إذا وجد
+                    .bodyMedium()
+                    .px2
+                    .inkWell(
+                      onTap: () {
+                        navigatorKey.currentContext!.push(RouteNames.register);
+                      },
+                    ),
+                Expanded(child: Divider(color: Colors.grey.shade300)),
+              ],
+            ).px4,
           ],
         ).center.pb8.px4,
       ),
