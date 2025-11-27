@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym_system/core/utils/ui_extensions/input_decoration_extensions.dart'
-    show InputDecorationExtension;
 
 import '../core/utils/app_styles.dart';
-import '../core/utils/ui_extensions/complete_flutter_extensions.dart'
-    show WidgetExtensions;
+
+import '../core/utils/ui_extensions/extensions_init.dart';
 
 class AppCustomForm extends StatefulWidget {
   final String? hintText, title, helperText;
@@ -286,25 +284,28 @@ class _AppCustomFormState extends State<AppCustomForm> {
               (widget.maxLines == 1
                   ? TextInputAction.done
                   : TextInputAction.newline),
-          decoration: InputDecoration(
-            hintText: widget.hintText ?? widget.title ?? '',
-            helperText: widget.helperText,
-            errorText: widget.errorText,
-            counterText: '',
-            fillColor: widget.fillColor ?? theme.cardColor,
-            filled: true,
-            prefixIcon: buildPrefixIcon(context),
-            suffixIcon: buildSuffixIcon(context),
-            contentPadding:
-                widget.contentPadding ??
-                EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-            border: widget.border ?? _buildBorder(theme),
-            enabledBorder: widget.border ?? _buildBorder(theme),
-            focusedBorder: widget.border ?? _buildBorder(theme, focused: true),
-            errorBorder: widget.border ?? _buildBorder(theme, error: true),
-            disabledBorder:
-                widget.border ?? _buildBorder(theme, disabled: true),
-            errorMaxLines: 2,
+          decoration: InputDecorationExtension(
+            InputDecoration(
+              hintText: widget.hintText ?? widget.title ?? '',
+              helperText: widget.helperText,
+              errorText: widget.errorText,
+              counterText: '',
+              fillColor: widget.fillColor ?? theme.cardColor,
+              filled: true,
+              prefixIcon: buildPrefixIcon(context),
+              suffixIcon: buildSuffixIcon(context),
+              contentPadding:
+                  widget.contentPadding ??
+                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+              border: widget.border ?? _buildBorder(theme),
+              enabledBorder: widget.border ?? _buildBorder(theme),
+              focusedBorder:
+                  widget.border ?? _buildBorder(theme, focused: true),
+              errorBorder: widget.border ?? _buildBorder(theme, error: true),
+              disabledBorder:
+                  widget.border ?? _buildBorder(theme, disabled: true),
+              errorMaxLines: 2,
+            ),
           ).applyInputDecorationTheme(AppStyles.inputDecorationTheme),
         ),
         // if (widget.errorText != null && widget.errorText!.isNotEmpty)

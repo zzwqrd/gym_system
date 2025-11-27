@@ -2,9 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym_system/core/utils/ui_extensions/box_extensions.dart'
-    show BoxExtensions;
-import 'package:gym_system/core/utils/ui_extensions/text_style_extensions.dart';
+import 'package:gym_system/core/utils/ui_extensions/extensions_init.dart';
+
 import 'package:gym_system/di/service_locator.dart';
 import 'package:gym_system/features/auth/login/presentation/controller/state.dart';
 import 'package:gym_system/gen/locale_keys.g.dart';

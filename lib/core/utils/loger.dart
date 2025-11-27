@@ -5,49 +5,49 @@ class LoggerDebug {
   String headColor;
   String? constTitle;
 
-  black(String message, [String? title]) {
+  void black(String message, [String? title]) {
     return log(
       "${LogColors.black}$message${LogColors.reset}",
       name: "$headColor${title ?? constTitle ?? ""}${LogColors.reset}",
     );
   }
 
-  white(String message, [String? title]) {
+  void white(String message, [String? title]) {
     return log(
       "${LogColors.white}$message${LogColors.reset}",
       name: "$headColor${title ?? constTitle ?? ""}${LogColors.reset}",
     );
   }
 
-  red(String message, [String? title]) {
+  void red(String message, [String? title]) {
     return log(
       "${LogColors.red}$message${LogColors.reset}",
       name: "\"$headColor${title ?? constTitle ?? ""}${LogColors.reset}\"",
     );
   }
 
-  green(String message, [String? title]) {
+  void green(String message, [String? title]) {
     return log(
       "${LogColors.green}$message${LogColors.reset}",
       name: "$headColor${title ?? constTitle ?? ""}${LogColors.reset}",
     );
   }
 
-  yellow(String message, [String? title]) {
+  void yellow(String message, [String? title]) {
     return log(
       "${LogColors.yellow}$message${LogColors.reset}",
       name: "$headColor${title ?? constTitle ?? ""}${LogColors.reset}",
     );
   }
 
-  blue(String message, [String? title]) {
+  void blue(String message, [String? title]) {
     return log(
       "${LogColors.blue}$message${LogColors.reset}",
       name: "$headColor${title ?? constTitle ?? ""}${LogColors.reset}",
     );
   }
 
-  cyan(String message, [String? title]) {
+  void cyan(String message, [String? title]) {
     return log(
       "${LogColors.cyan}$message${LogColors.reset}",
       name: "$headColor${title ?? constTitle ?? ""}${LogColors.reset}",

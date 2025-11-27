@@ -1,53 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 extension ExtensionContext on BuildContext {
-  double get h => MediaQuery.of(this).size.height;
-  double get w => MediaQuery.of(this).size.width;
+  // double get h => MediaQuery.of(this).size.height;
+  // double get w => MediaQuery.of(this).size.width;
 
-  ThemeData? get theme => Theme.of(this);
+  // ThemeData? get theme => Theme.of(this);
 
-  EdgeInsets get padding => MediaQuery.of(this).padding;
+  // EdgeInsets get padding => MediaQuery.of(this).padding;
 
-  TextStyle get boldText =>
-      Theme.of(this).textTheme.labelLarge ?? const TextStyle();
-  TextStyle get lightText =>
-      Theme.of(this).textTheme.labelSmall ?? const TextStyle();
-  TextStyle get mediumText =>
-      Theme.of(this).textTheme.labelMedium ?? const TextStyle();
-  TextStyle get regularText =>
-      Theme.of(this).textTheme.headlineSmall ?? const TextStyle();
-  TextStyle get semiboldText =>
-      Theme.of(this).textTheme.headlineMedium ?? const TextStyle();
+  // TextStyle get boldText =>
+  //     Theme.of(this).textTheme.labelLarge ?? const TextStyle();
+  // TextStyle get lightText =>
+  //     Theme.of(this).textTheme.labelSmall ?? const TextStyle();
+  // TextStyle get mediumText =>
+  //     Theme.of(this).textTheme.labelMedium ?? const TextStyle();
+  // TextStyle get regularText =>
+  //     Theme.of(this).textTheme.headlineSmall ?? const TextStyle();
+  // TextStyle get semiboldText =>
+  //     Theme.of(this).textTheme.headlineMedium ?? const TextStyle();
 
-  Color get primaryColor => Theme.of(this).primaryColor;
-  Color get highlightColor => Theme.of(this).highlightColor;
-  Color get focusColor => Theme.of(this).focusColor;
-  Color get splashColor => Theme.of(this).splashColor;
-  Color get onSurfaceVariant => Theme.of(this).colorScheme.onSurfaceVariant;
-  Color get tertiary => Theme.of(this).colorScheme.tertiary;
-  Color get disabledColor => Theme.of(this).disabledColor;
-  Color get hoverColor => Theme.of(this).hoverColor;
-  Color get hintColor => Theme.of(this).hintColor;
-  Color get errorColor => Theme.of(this).colorScheme.error;
-  Color get primaryColorLight => Theme.of(this).primaryColorLight;
-  Color get primaryColorDark => Theme.of(this).primaryColorDark;
-  Color get secondaryColor => Theme.of(this).colorScheme.secondary;
-  Color get secondaryContainer => Theme.of(this).colorScheme.secondaryContainer;
-  Color get scaffoldBackgroundColor => Theme.of(this).scaffoldBackgroundColor;
-  Color get primaryContainer => Theme.of(this).colorScheme.primaryContainer;
-  Color get borderColor =>
-      Theme.of(this).dividerTheme.color ?? Theme.of(this).hoverColor;
-  Color get tertiaryContainer => Theme.of(this).colorScheme.tertiaryContainer;
-  Color get canvasColor => Theme.of(this).canvasColor;
-  Color get indicatorColor => Theme.of(this).indicatorColor;
+  // Color get primaryColor => Theme.of(this).primaryColor;
+  // Color get highlightColor => Theme.of(this).highlightColor;
+  // Color get focusColor => Theme.of(this).focusColor;
+  // Color get splashColor => Theme.of(this).splashColor;
+  // Color get onSurfaceVariant => Theme.of(this).colorScheme.onSurfaceVariant;
+  // Color get tertiary => Theme.of(this).colorScheme.tertiary;
+  // Color get disabledColor => Theme.of(this).disabledColor;
+  // Color get hoverColor => Theme.of(this).hoverColor;
+  // Color get hintColor => Theme.of(this).hintColor;
+  // Color get errorColor => Theme.of(this).colorScheme.error;
+  // Color get primaryColorLight => Theme.of(this).primaryColorLight;
+  // Color get primaryColorDark => Theme.of(this).primaryColorDark;
+  // Color get secondaryColor => Theme.of(this).colorScheme.secondary;
+  // Color get secondaryContainer => Theme.of(this).colorScheme.secondaryContainer;
+  // Color get scaffoldBackgroundColor => Theme.of(this).scaffoldBackgroundColor;
+  // Color get primaryContainer => Theme.of(this).colorScheme.primaryContainer;
+  // Color get borderColor =>
+  //     Theme.of(this).dividerTheme.color ?? Theme.of(this).hoverColor;
+  // Color get tertiaryContainer => Theme.of(this).colorScheme.tertiaryContainer;
+  // Color get canvasColor => Theme.of(this).canvasColor;
+  // Color get indicatorColor => Theme.of(this).indicatorColor;
 
-  String get currentRoute => ModalRoute.of(this)?.settings.name ?? "";
+  // String get currentRoute => ModalRoute.of(this)?.settings.name ?? "";
 
-  BoxDecoration get primaryDecoration => BoxDecoration(
-    borderRadius: BorderRadius.circular(14.r),
-    color: primaryContainer,
-  );
+  // BoxDecoration get primaryDecoration => BoxDecoration(
+  //   borderRadius: BorderRadius.circular(14.r),
+  //   color: primaryContainer,
+  // );
 
   Map<dynamic, dynamic> get arg =>
       (ModalRoute.of(this)?.settings.arguments ?? {}) as Map<dynamic, dynamic>;
@@ -128,44 +127,44 @@ extension StringExtensions on String {
 }
 
 extension ExtensionWidget on Widget {
-  Widget get center => Align(alignment: Alignment.center, child: this);
+  // Widget get center => Align(alignment: Alignment.center, child: this);
 
-  Widget withPadding({
-    double all = 0.0,
-    double vertical = 0.0,
-    double horizontal = 0.0,
-    double top = 0.0,
-    double bottom = 0.0,
-    double start = 0.0,
-    double end = 0.0,
-  }) {
-    return Padding(
-      padding: EdgeInsetsDirectional.only(
-        top: all + vertical + top,
-        bottom: all + vertical + bottom,
-        start: all + horizontal + start,
-        end: all + horizontal + end,
-      ),
-      child: this,
-    );
-  }
+  // Widget withPadding({
+  //   double all = 0.0,
+  //   double vertical = 0.0,
+  //   double horizontal = 0.0,
+  //   double top = 0.0,
+  //   double bottom = 0.0,
+  //   double start = 0.0,
+  //   double end = 0.0,
+  // }) {
+  //   return Padding(
+  //     padding: EdgeInsetsDirectional.only(
+  //       top: all + vertical + top,
+  //       bottom: all + vertical + bottom,
+  //       start: all + horizontal + start,
+  //       end: all + horizontal + end,
+  //     ),
+  //     child: this,
+  //   );
+  // }
 
-  Widget get toEnd =>
-      Align(alignment: AlignmentDirectional.centerEnd, child: this);
-  Widget get toStart =>
-      Align(alignment: AlignmentDirectional.centerStart, child: this);
-  Widget get toBottom => Align(alignment: Alignment.bottomCenter, child: this);
-  Widget get toBottomEnd =>
-      Align(alignment: AlignmentDirectional.bottomEnd, child: this);
-  Widget get toBottomStart =>
-      Align(alignment: AlignmentDirectional.bottomStart, child: this);
-  Widget get toTopEnd =>
-      Align(alignment: AlignmentDirectional.topEnd, child: this);
-  Widget get toTopStart =>
-      Align(alignment: AlignmentDirectional.topStart, child: this);
-  Widget get toTop => Align(alignment: Alignment.topCenter, child: this);
-  Widget get withMainAxisSizeMin =>
-      Column(mainAxisSize: MainAxisSize.min, children: [this]);
+  // Widget get toEnd =>
+  //     Align(alignment: AlignmentDirectional.centerEnd, child: this);
+  // Widget get toStart =>
+  //     Align(alignment: AlignmentDirectional.centerStart, child: this);
+  // Widget get toBottom => Align(alignment: Alignment.bottomCenter, child: this);
+  // Widget get toBottomEnd =>
+  //     Align(alignment: AlignmentDirectional.bottomEnd, child: this);
+  // Widget get toBottomStart =>
+  //     Align(alignment: AlignmentDirectional.bottomStart, child: this);
+  // Widget get toTopEnd =>
+  //     Align(alignment: AlignmentDirectional.topEnd, child: this);
+  // Widget get toTopStart =>
+  //     Align(alignment: AlignmentDirectional.topStart, child: this);
+  // Widget get toTop => Align(alignment: Alignment.topCenter, child: this);
+  // Widget get withMainAxisSizeMin =>
+  //     Column(mainAxisSize: MainAxisSize.min, children: [this]);
 }
 
 extension ExtensionInt on int {
@@ -187,33 +186,33 @@ extension ExtensionDateTime on DateTime {
       year == other?.year && month == other?.month && day == other?.day;
 }
 
-// Extension على String لتغيير لون النص
-extension TextColorExtension on String {
-  // تغيير لون النص باستخدام Color
-  Widget colors(Color color) {
-    return Text(
-      this, // النص الحالي
-      style: TextStyle(color: color), // تطبيق اللون المحدد
-    );
-  }
+// // Extension على String لتغيير لون النص
+// extension TextColorExtension on String {
+//   // تغيير لون النص باستخدام Color
+//   Widget colors(Color color) {
+//     return Text(
+//       this, // النص الحالي
+//       style: TextStyle(color: color), // تطبيق اللون المحدد
+//     );
+//   }
 
-  // تغيير لون النص مع تحديد حجم الخط
-  Widget colorWithSize(Color color, double fontSize) {
-    return Text(
-      this,
-      style: TextStyle(color: color, fontSize: fontSize),
-    );
-  }
+//   // تغيير لون النص مع تحديد حجم الخط
+//   Widget colorWithSize(Color color, double fontSize) {
+//     return Text(
+//       this,
+//       style: TextStyle(color: color, fontSize: fontSize),
+//     );
+//   }
 
-  // تغيير لون النص مع تحديد الحجم والخط الغامق
-  Widget boldColor(Color color, double fontSize) {
-    return Text(
-      this,
-      style: TextStyle(
-        color: color,
-        fontSize: fontSize,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-}
+//   // تغيير لون النص مع تحديد الحجم والخط الغامق
+//   Widget boldColor(Color color, double fontSize) {
+//     return Text(
+//       this,
+//       style: TextStyle(
+//         color: color,
+//         fontSize: fontSize,
+//         fontWeight: FontWeight.bold,
+//       ),
+//     );
+//   }
+// }

@@ -1,8 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../../core/utils/extensions.dart';
-import '../routes/app_routes_fun.dart';
+import 'package:gym_system/core/routes/app_routes_fun.dart';
+import 'package:gym_system/core/utils/ui_extensions/extensions_init.dart';
+import '../context/context_extensions.dart';
 
 extension RichTextExtension on BuildContext {
   /// Build a rich text with tap recognizer
@@ -17,8 +18,7 @@ extension RichTextExtension on BuildContext {
     return Text.rich(
       TextSpan(
         text: text,
-        style: style ??
-            navigatorKey.currentContext!.regularText.copyWith(fontSize: 14),
+        style: style ?? navigatorKey.currentContext!.bodyMedium,
         recognizer: TapGestureRecognizer()..onTap = onTap,
       ),
       textAlign: textAlign,
@@ -40,11 +40,10 @@ extension RichTextExtension on BuildContext {
     return buildRichText(
       text: text,
       onTap: onTap,
-      style: style ??
-          navigatorKey.currentContext!.regularText.copyWith(fontSize: 14),
+      style: style ?? navigatorKey.currentContext!.bodyMedium,
       decoration: TextDecoration.underline,
       decorationColor:
-          underlineColor ?? navigatorKey.currentContext!.secondaryColor,
+          underlineColor ?? navigatorKey.currentContext!.primaryColor,
     );
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_system/core/utils/ui_extensions/context/context_extensions.dart';
 
 import '../../core/utils/extensions.dart';
 import '../core/routes/app_routes_fun.dart';
+import '../core/utils/ui_extensions/color/color_extensions.dart';
 import '../gen/assets.gen.dart';
 
 enum MessageTypeTost { success, fail, warning }
@@ -59,9 +61,9 @@ class FlashHelper {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.start,
                     softWrap: true,
-                    style: context.regularText.copyWith(
+                    style: context.displaySmall.copyWith(
                       fontSize: 16,
-                      color: context.primaryColorLight,
+                      color: context.primaryColor,
                     ),
                   ),
                 ),

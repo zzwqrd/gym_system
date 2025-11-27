@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gym_system/core/utils/ui_extensions/style_extensions_mor.dart';
 
+import '../../../../core/utils/ui_extensions/extensions_init.dart';
 import '../../../../di/service_locator.dart';
 import 'get_data_user_cubit.dart';
 
@@ -21,7 +21,7 @@ class TestView extends StatelessWidget {
             onPressed: () {
               bloc.loginAdmin("admin@admin.com", "1234567");
             },
-            child: 'Details'.h1(),
+            child: 'Details'.h1,
           );
           // switch (state) {
           //   case GetDataUserInitial():

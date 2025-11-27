@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gym_system/core/utils/ui_extensions/box_extensions.dart';
-import 'package:gym_system/core/utils/ui_extensions/complete_flutter_extensions.dart'
-    show StringExtensions, NumExtensions;
+import 'package:gym_system/core/utils/ui_extensions/extensions_init.dart';
 
 import '../../../../di/service_locator.dart';
 import '../controller/controller.dart';
@@ -25,7 +23,7 @@ class SplashView extends StatelessWidget {
             children: [
               CircularProgressIndicator(),
               18.verticalSpace,
-              "... loading".h1().center,
+              "... loading".h1.center,
             ],
           ),
         );

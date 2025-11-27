@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_system/core/utils/ui_extensions/extensions_init.dart';
 import 'package:gym_system/gen/locale_keys.g.dart';
 
 import '../core/utils/app_styles.dart';
 import '../core/utils/extensions.dart';
 import '../core/utils/field_extensions.dart';
-import '../core/utils/input_decoration_extensions.dart';
 import 'button_animation/loading_app.dart';
 
 class AppCustomForm extends StatefulWidget {
@@ -267,7 +267,7 @@ class _AppCustomFormState extends State<AppCustomForm> {
           Text(
             widget.title!,
             style: AppStyles.mediumText.copyWith(fontSize: 14),
-          ).withPadding(bottom: 8.h),
+          ).paddingOnly(bottom: 8.h),
         TextFormField(
           initialValue: widget.initialValue,
           onChanged: widget.onChanged,
@@ -326,7 +326,7 @@ class _AppCustomFormState extends State<AppCustomForm> {
         child: Icon(
           showPass ? CupertinoIcons.eye : CupertinoIcons.eye_slash,
           size: 16,
-          color: showPass ? context.secondaryColor : context.hintColor,
+          color: showPass ? context.secondaryColor : context.highlightColor,
         ),
       );
     }
@@ -334,7 +334,7 @@ class _AppCustomFormState extends State<AppCustomForm> {
   }
 
   Widget? buildPrefixIcon(BuildContext context) {
-    return widget.prefixIcon?.withPadding(end: 10.w);
+    return widget.prefixIcon?.paddingOnly(top: 10.w, bottom: 10.w);
   }
 }
 

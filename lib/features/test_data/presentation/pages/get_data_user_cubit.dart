@@ -11,7 +11,7 @@ import 'user_model.dart';
 
 // الكيوبت المسؤول عن جلب بيانات المستخدمين من قاعدة البيانات بئكثر من طريقة
 // لتجربه الاستعلامات المختلفة
-@visibleForTesting
+
 class GetDataUserCubit extends Cubit<GetDataUserState> {
   final DBHelper _dbHelper = DBHelper();
 
@@ -313,7 +313,7 @@ class GetDataUserCubit extends Cubit<GetDataUserState> {
       //  QueryBuilder orderBy(String column, {String direction = 'ASC'})
       final results = await _dbHelper
           .table('users')
-          .orderBy('first_name', direction: false ? 'ASC' : 'DESC')
+          .orderBy('first_name', direction: 'DESC')
           .get();
       final users = results.map((userMap) => User.fromMap(userMap)).toList();
       emit(GetDataUserLoaded(users));
@@ -493,7 +493,7 @@ class GetDataUserCubit extends Cubit<GetDataUserState> {
         'updated_at': DateTime.now().toIso8601String(),
       });
     } catch (e) {
-      print('⚠️ Failed to update last login: $e');
+      debugPrint('⚠️ Failed to update last login: $e');
     }
   }
 
