@@ -1,55 +1,44 @@
 import 'package:flutter/material.dart';
 
-/// String Extensions for Text Styling
-extension StringTextExtensions on String {
+/// Smart Text Extensions for String, num, and Text
+extension SmartTextExtensions on dynamic {
   // Basic Text Widget with Style
-  Text styled(TextStyle style) => Text(this, style: style);
+  Text styled(TextStyle style) {
+    if (this is Text) {
+      final text = this as Text;
+      return Text(
+        text.data ?? '',
+        style: (text.style ?? const TextStyle()).merge(style),
+        textAlign: text.textAlign,
+        maxLines: text.maxLines,
+        overflow: text.overflow,
+      );
+    }
+    return Text(toString(), style: style);
+  }
 
   // Quick Text Widgets
-  Text get text => Text(this);
-  Text get h1 => Text(
-    this,
-    style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-  );
-  Text get h2 => Text(
-    this,
-    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-  );
-  Text get h3 => Text(
-    this,
-    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-  );
-  Text get h4 => Text(
-    this,
-    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-  );
-  Text get h5 => Text(
-    this,
-    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-  );
-  Text get h6 => Text(
-    this,
-    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-  );
+  Text get text => this is Text ? this as Text : Text(toString());
 
-  Text get body => Text(this, style: const TextStyle(fontSize: 16));
-  Text get caption =>
-      Text(this, style: const TextStyle(fontSize: 12, color: Colors.grey));
-  Text get overline =>
-      Text(this, style: const TextStyle(fontSize: 10, letterSpacing: 1.5));
+  Text get h1 => withStyle(fontSize: 32, fontWeight: FontWeight.bold);
+  Text get h2 => withStyle(fontSize: 28, fontWeight: FontWeight.bold);
+  Text get h3 => withStyle(fontSize: 24, fontWeight: FontWeight.w600);
+  Text get h4 => withStyle(fontSize: 20, fontWeight: FontWeight.w600);
+  Text get h5 => withStyle(fontSize: 18, fontWeight: FontWeight.w500);
+  Text get h6 => withStyle(fontSize: 16, fontWeight: FontWeight.w500);
+
+  Text get body => withStyle(fontSize: 16);
+  Text get caption => withStyle(fontSize: 12, color: Colors.grey);
+  Text get overline => withStyle(fontSize: 10, letterSpacing: 1.5);
 
   // Styled Text Shortcuts
-  Text bold() =>
-      Text(this, style: const TextStyle(fontWeight: FontWeight.bold));
-  Text italic() =>
-      Text(this, style: const TextStyle(fontStyle: FontStyle.italic));
-  Text underline() =>
-      Text(this, style: const TextStyle(decoration: TextDecoration.underline));
+  Text bold() => withStyle(fontWeight: FontWeight.bold);
+  Text italic() => withStyle(fontStyle: FontStyle.italic);
+  Text underline() => withStyle(decoration: TextDecoration.underline);
 
-  Text colors(Color color) => Text(this, style: TextStyle(color: color));
-  Text size(double size) => Text(this, style: TextStyle(fontSize: size));
-  Text weight(FontWeight weight) =>
-      Text(this, style: TextStyle(fontWeight: weight));
+  Text colors(Color color) => withStyle(color: color);
+  Text size(double size) => withStyle(fontSize: size);
+  Text weight(FontWeight weight) => withStyle(fontWeight: weight);
 
   // Advanced Text Widgets
   Text withStyle({
@@ -64,86 +53,41 @@ extension StringTextExtensions on String {
     TextAlign? textAlign,
     int? maxLines,
     TextOverflow? overflow,
-    TextStyle? style,
-  }) => Text(
-    this,
-    style:
-        style ??
-        TextStyle(
-          color: color,
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          fontStyle: fontStyle,
-          decoration: decoration,
-          letterSpacing: letterSpacing,
-          height: height,
-          fontFamily: fontFamily,
-        ),
-    textAlign: textAlign,
-    maxLines: maxLines,
-    overflow: overflow,
-  );
-  // Basic text widget
-  Widget textWithoutStyle({
-    TextStyle? style,
-    Color? color,
-    double? fontSize,
-    FontWeight? fontWeight,
-    TextAlign? textAlign,
-    int? maxLines,
-    TextOverflow? overflow,
-    double? letterSpacing,
-    double? height,
-    TextDecoration? decoration,
-    Color? decorationColor,
-    TextDecorationStyle? decorationStyle,
-    double? decorationThickness,
-    String? fontFamily,
-    List<String>? fontFamilyFallback,
-    Paint? background,
-    Paint? foreground,
-    List<Shadow>? shadows,
-    List<FontFeature>? fontFeatures,
-    TextBaseline? textBaseline,
-    Locale? locale,
-    bool? softWrap,
-    StrutStyle? strutStyle,
-    TextWidthBasis? textWidthBasis,
-    TextHeightBehavior? textHeightBehavior,
-  }) => Text(
-    this,
-    style: (style ?? const TextStyle()).copyWith(
+  }) {
+    TextStyle newStyle = TextStyle(
       color: color,
       fontSize: fontSize,
       fontWeight: fontWeight,
+      fontStyle: fontStyle,
+      decoration: decoration,
       letterSpacing: letterSpacing,
       height: height,
-      decoration: decoration,
-      decorationColor: decorationColor,
-      decorationStyle: decorationStyle,
-      decorationThickness: decorationThickness,
       fontFamily: fontFamily,
-      fontFamilyFallback: fontFamilyFallback,
-      background: background,
-      foreground: foreground,
-      shadows: shadows,
-      fontFeatures: fontFeatures,
-      textBaseline: textBaseline,
-      locale: locale,
-    ),
-    textAlign: textAlign,
-    maxLines: maxLines,
-    overflow: overflow,
-    softWrap: softWrap,
-    strutStyle: strutStyle,
-    textWidthBasis: textWidthBasis,
-    textHeightBehavior: textHeightBehavior,
-  );
+    );
+
+    if (this is Text) {
+      final text = this as Text;
+      return Text(
+        text.data ?? '',
+        style: (text.style ?? const TextStyle()).merge(newStyle),
+        textAlign: textAlign ?? text.textAlign,
+        maxLines: maxLines ?? text.maxLines,
+        overflow: overflow ?? text.overflow,
+      );
+    }
+
+    return Text(
+      toString(),
+      style: newStyle,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow,
+    );
+  }
 
   // Display Text Extensions
-  Widget displayLarge({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text displayLarge({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 57,
       fontWeight: FontWeight.w400,
       height: 1.12,
@@ -151,18 +95,16 @@ extension StringTextExtensions on String {
     ).merge(style).copyWith(color: color),
   );
 
-  Widget displayMedium({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text displayMedium({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 45,
       fontWeight: FontWeight.w400,
       height: 1.16,
     ).merge(style).copyWith(color: color),
   );
 
-  Widget displaySmall({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text displaySmall({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 36,
       fontWeight: FontWeight.w400,
       height: 1.22,
@@ -170,27 +112,24 @@ extension StringTextExtensions on String {
   );
 
   // Headline Extensions
-  Widget headlineLarge({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text headlineLarge({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 32,
       fontWeight: FontWeight.w400,
       height: 1.25,
     ).merge(style).copyWith(color: color),
   );
 
-  Widget headlineMedium({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text headlineMedium({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.w400,
       height: 1.29,
     ).merge(style).copyWith(color: color),
   );
 
-  Widget headlineSmall({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text headlineSmall({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 24,
       fontWeight: FontWeight.w400,
       height: 1.33,
@@ -198,18 +137,16 @@ extension StringTextExtensions on String {
   );
 
   // Title Extensions
-  Widget titleLarge({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text titleLarge({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 22,
       fontWeight: FontWeight.w400,
       height: 1.27,
     ).merge(style).copyWith(color: color),
   );
 
-  Widget titleMedium({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text titleMedium({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w500,
       height: 1.50,
@@ -217,9 +154,8 @@ extension StringTextExtensions on String {
     ).merge(style).copyWith(color: color),
   );
 
-  Widget titleSmall({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text titleSmall({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w500,
       height: 1.43,
@@ -227,87 +163,25 @@ extension StringTextExtensions on String {
     ).merge(style).copyWith(color: color),
   );
 
-  // Legacy Header Extensions (for backward compatibility)
-  Widget h1WithoutStyle({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
-      fontSize: 32,
-      fontWeight: FontWeight.bold,
-      height: 1.2,
-      letterSpacing: -0.5,
-    ).merge(style).copyWith(color: color),
-  );
-
-  Widget h2WithoutStyle({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
-      fontSize: 28,
-      fontWeight: FontWeight.bold,
-      height: 1.3,
-      letterSpacing: -0.5,
-    ).merge(style).copyWith(color: color),
-  );
-
-  Widget h3WithoutStyle({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
-      fontSize: 24,
-      fontWeight: FontWeight.w600,
-      height: 1.3,
-      letterSpacing: -0.25,
-    ).merge(style).copyWith(color: color),
-  );
-
-  Widget h4WithoutStyle({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.w600,
-      height: 1.4,
-    ).merge(style).copyWith(color: color),
-  );
-
-  Widget h5WithoutStyle({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
-      height: 1.4,
-    ).merge(style).copyWith(color: color),
-  );
-
-  Widget h6WithoutStyle({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-      height: 1.5,
-      letterSpacing: 0.15,
-    ).merge(style).copyWith(color: color),
-  );
-
   // Body Text Extensions
-  Widget bodyLarge({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text bodyLarge({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 16,
       height: 1.5,
       letterSpacing: 0.5,
     ).merge(style).copyWith(color: color),
   );
 
-  Widget bodyMedium({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text bodyMedium({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 14,
       height: 1.43,
       letterSpacing: 0.25,
     ).merge(style).copyWith(color: color),
   );
 
-  Widget bodySmall({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text bodySmall({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 12,
       height: 1.33,
       letterSpacing: 0.4,
@@ -315,9 +189,8 @@ extension StringTextExtensions on String {
   );
 
   // Label Extensions
-  Widget labelLarge({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text labelLarge({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w500,
       height: 1.43,
@@ -325,9 +198,8 @@ extension StringTextExtensions on String {
     ).merge(style).copyWith(color: color),
   );
 
-  Widget labelMedium({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text labelMedium({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w500,
       height: 1.33,
@@ -335,9 +207,8 @@ extension StringTextExtensions on String {
     ).merge(style).copyWith(color: color),
   );
 
-  Widget labelSmall({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text labelSmall({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 11,
       fontWeight: FontWeight.w500,
       height: 1.45,
@@ -345,19 +216,70 @@ extension StringTextExtensions on String {
     ).merge(style).copyWith(color: color),
   );
 
+  // Legacy Header Extensions (for backward compatibility)
+  Text h1WithoutStyle({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+      height: 1.2,
+      letterSpacing: -0.5,
+    ).merge(style).copyWith(color: color),
+  );
+
+  Text h2WithoutStyle({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
+      fontSize: 28,
+      fontWeight: FontWeight.bold,
+      height: 1.3,
+      letterSpacing: -0.5,
+    ).merge(style).copyWith(color: color),
+  );
+
+  Text h3WithoutStyle({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+      height: 1.3,
+      letterSpacing: -0.25,
+    ).merge(style).copyWith(color: color),
+  );
+
+  Text h4WithoutStyle({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
+      height: 1.4,
+    ).merge(style).copyWith(color: color),
+  );
+
+  Text h5WithoutStyle({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      height: 1.4,
+    ).merge(style).copyWith(color: color),
+  );
+
+  Text h6WithoutStyle({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      height: 1.5,
+      letterSpacing: 0.15,
+    ).merge(style).copyWith(color: color),
+  );
+
   // Legacy Text Extensions
-  Widget captionWithoutStyle({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text captionWithoutStyle({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 12,
       height: 1.33,
       letterSpacing: 0.4,
     ).merge(style).copyWith(color: color?.withValues(alpha: 0.7) ?? color),
   );
 
-  Widget overlineWithoutStyle({Color? color, TextStyle? style}) => Text(
-    this,
-    style: const TextStyle(
+  Text overlineWithoutStyle({Color? color, TextStyle? style}) => styled(
+    const TextStyle(
       fontSize: 10,
       fontWeight: FontWeight.w500,
       letterSpacing: 1.5,

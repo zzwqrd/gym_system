@@ -24,7 +24,7 @@ class RecentItem extends StatelessWidget {
                 .container(
                   decoration: BoxDecoration(
                     color: iconColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: 10.r,
                   ),
                 ),
             15.horizontalSpace,
@@ -43,7 +43,7 @@ class RecentItem extends StatelessWidget {
         .container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: 15.r,
             border: Border.all(color: Colors.grey.shade100),
           ),
         );

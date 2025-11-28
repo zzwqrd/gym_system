@@ -30,10 +30,8 @@ extension AppDecorations on BuildContext {
     ],
   );
   // BoxDecoration(color: bgColor, borderRadius: 15.r)
-  BoxDecoration get categoryBoxDecoration => BoxDecoration(
-    color: navigatorKey.currentContext!.surfaceColor,
-    borderRadius: 15.r,
-  );
+  BoxDecoration categoryDecoration(Color color) =>
+      BoxDecoration(color: color, borderRadius: 15.r);
 
   BoxDecoration boxDecoration({required Color color}) => BoxDecoration(
     color: color,

@@ -19,13 +19,11 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(
-          icon,
-          color: iconColor,
-          size: context.icon28,
-        ).paddingAll(15).container(decoration: context.categoryBoxDecoration),
+        Icon(icon, color: iconColor, size: context.icon28)
+            .paddingAll(15)
+            .container(decoration: context.categoryDecoration(bgColor)),
         8.verticalSpace,
-        label.withStyle(fontSize: 12, fontWeight: FontWeight.w500),
+        label.labelMedium(),
       ],
     );
   }
