@@ -36,8 +36,9 @@ class Admin {
       lastLoginAt: map['last_login_at'] != null
           ? DateTime.parse(map['last_login_at'] as String)
           : null,
-      createdAt: DateTime.parse(map['created_at'] as String),
-      updatedAt: DateTime.parse(map['updated_at'] as String),
+      // createdAt: DateTime.parse(map['created_at'] as String),
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     );
   }
 

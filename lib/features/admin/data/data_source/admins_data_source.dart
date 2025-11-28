@@ -18,6 +18,7 @@ class AdminsDataSourceImpl implements AdminsDataSource {
   Future<HelperResponse> getRoles() async {
     try {
       final result = await _dbHelper.rawQuery('SELECT * FROM roles');
+
       return HelperResponse.success(data: result);
     } catch (e) {
       return HelperResponse.error(
