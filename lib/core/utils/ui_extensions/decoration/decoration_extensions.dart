@@ -29,7 +29,23 @@ extension AppDecorations on BuildContext {
       ),
     ],
   );
+  // BoxDecoration(color: bgColor, borderRadius: 15.r)
+  BoxDecoration get categoryBoxDecoration => BoxDecoration(
+    color: navigatorKey.currentContext!.surfaceColor,
+    borderRadius: 15.r,
+  );
 
+  BoxDecoration boxDecoration({required Color color}) => BoxDecoration(
+    color: color,
+    borderRadius: navigatorKey.currentContext!.radiusMD,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withValues(alpha: 0.1),
+        blurRadius: 8,
+        offset: const Offset(0, 2),
+      ),
+    ],
+  );
   // Button Decorations
   BoxDecoration get primaryButtonDecoration => BoxDecoration(
     gradient: navigatorKey.currentContext!.primaryGradient,
@@ -73,4 +89,9 @@ extension AppDecorations on BuildContext {
     ),
     contentPadding: navigatorKey.currentContext!.paddingGeometry,
   );
+}
+
+extension ColorDecoration on Color {
+  BoxDecoration get circleDecoration =>
+      BoxDecoration(color: this, shape: BoxShape.circle);
 }

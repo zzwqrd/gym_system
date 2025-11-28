@@ -97,6 +97,8 @@ extension TextStyleExtensions on TextStyle {
   }) => copyWith(
     shadows: [Shadow(color: color, blurRadius: blurRadius, offset: offset)],
   );
+  TextStyle get styleItemCategory =>
+      copyWith(fontSize: 12, fontWeight: FontWeight.w500);
 
   TextStyle withGlow({Color color = Colors.white, double blurRadius = 10.0}) =>
       copyWith(

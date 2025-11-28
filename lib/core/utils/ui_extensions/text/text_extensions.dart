@@ -64,18 +64,21 @@ extension StringTextExtensions on String {
     TextAlign? textAlign,
     int? maxLines,
     TextOverflow? overflow,
+    TextStyle? style,
   }) => Text(
     this,
-    style: TextStyle(
-      color: color,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      fontStyle: fontStyle,
-      decoration: decoration,
-      letterSpacing: letterSpacing,
-      height: height,
-      fontFamily: fontFamily,
-    ),
+    style:
+        style ??
+        TextStyle(
+          color: color,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          fontStyle: fontStyle,
+          decoration: decoration,
+          letterSpacing: letterSpacing,
+          height: height,
+          fontFamily: fontFamily,
+        ),
     textAlign: textAlign,
     maxLines: maxLines,
     overflow: overflow,

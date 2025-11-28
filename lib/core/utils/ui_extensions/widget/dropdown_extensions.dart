@@ -431,7 +431,7 @@ class CustomDropdown {
                         selectedItems!.isEmpty
                             ? (hintText ?? 'اختر عناصر')
                             : selectedItemsText ??
-                                  '${selectedItems!.length} عنصر محدد',
+                                  '${selectedItems.length} عنصر محدد',
                         style:
                             style ??
                             TextStyle(

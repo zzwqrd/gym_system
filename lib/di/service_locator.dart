@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../features/auth/login/presentation/controller/controller.dart';
 import '../features/auth/register/presentation/controller/controller.dart';
+import '../features/layout/presentation/controller/cubit.dart';
 import '../features/splash/presentation/controller/controller.dart';
 
 final GetIt sl = GetIt.instance;
@@ -14,6 +15,7 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<SplashController>(() => SplashController());
   sl.registerFactory<LoginController>(() => LoginController());
   sl.registerFactory<RegisterController>(() => RegisterController());
+  sl.registerFactory<LayoutCubit>(() => LayoutCubit());
 
   // sl.registerFactory<GetDataUserCubit>(() => GetDataUserCubit());
 
