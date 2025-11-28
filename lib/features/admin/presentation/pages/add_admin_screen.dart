@@ -4,7 +4,6 @@ import 'package:gym_system/core/utils/ui_extensions/extensions_init.dart';
 import 'package:gym_system/features/admin/data/models/admin_model.dart';
 import 'package:gym_system/features/admin/domin/usecases/admins_usecase.dart';
 import 'package:gym_system/features/admin/presentation/cubit/add_admin_cubit.dart';
-import 'package:gym_system/features/admin/presentation/cubit/admins_cubit.dart';
 
 class AddAdminScreen extends StatelessWidget {
   const AddAdminScreen({super.key});
