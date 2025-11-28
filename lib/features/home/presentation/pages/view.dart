@@ -66,7 +66,7 @@ class HomeView extends StatelessWidget {
                           children: [
                             CircularProgressIndicator(
                               value: 0.52,
-                              strokeWidth: 12,
+                              strokeWidth: 2,
                               backgroundColor: Colors.grey.shade100,
                               valueColor: const AlwaysStoppedAnimation<Color>(
                                 Colors.blue,
@@ -76,7 +76,7 @@ class HomeView extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 '52%'.withStyle(
-                                  fontSize: 24,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue,
                                 ),
