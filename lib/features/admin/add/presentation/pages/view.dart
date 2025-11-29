@@ -72,7 +72,7 @@ class _AddAdminViewState extends State<AddAdminView> {
                     isRequired: true,
                   ).pb4,
                   SwitchListTile(
-                    title: const Text('نشط'),
+                    title: 'نشط'.h6,
                     value: _isActive,
                     onChanged: (val) => setState(() => _isActive = val),
                   ).pb6,
