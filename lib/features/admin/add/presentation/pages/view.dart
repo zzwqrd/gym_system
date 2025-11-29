@@ -78,7 +78,7 @@ class _AddAdminViewState extends State<AddAdminView> {
                   ).pb6,
                   LoadingButton(
                     title: 'إضافة',
-                    isAnimating: state.requestState == RequestState.loading,
+                    isAnimating: state.requestState.isLoading,
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
                         final sendData = SendData(
