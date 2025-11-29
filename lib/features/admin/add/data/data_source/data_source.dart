@@ -1,62 +1,71 @@
-import '../../../../../core/database/db_helper.dart';
-import '../../../../../core/resources/helper_respons.dart';
-import '../../../../../core/utils/enums.dart';
-import '../models/add_admin_send_data.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import '../../../../../../core/database/db_helper.dart';
+import '../../../../../../core/resources/helper_respons.dart';
+import '../../../../../../core/utils/enums.dart';
+import '../model/model.dart';
+import '../model/send_data.dart';
 
 abstract class AddAdminDataSource {
-  Future<HelperResponse> addAdmin(AddAdminSendData admin);
-  Future<HelperResponse<bool>> checkEmail(String email);
+  Future<HelperResponse<Admin>> addAdmin(SendData sendData);
 }
 
 class AddAdminDataSourceImpl implements AddAdminDataSource {
   final _dbHelper = DBHelper();
+
   @override
-  Future<HelperResponse> addAdmin(AddAdminSendData admin) async {
+  Future<HelperResponse<Admin>> addAdmin(SendData sendData) async {
     try {
-      final adminMap = await _dbHelper.table('admins').insert(admin.toJson());
-      final checkEmailResponse = await checkEmail(admin.email);
-      if (checkEmailResponse.data == true) {
+      // Check if email exists
+      final exists = await _dbHelper
+          .table('admins')
+          .where('email', sendData.email)
+          .exists();
+
+      if (exists) {
         return HelperResponse.error(
-          message: 'البريد الالكتروني موجود بالفعل',
-          errorType: ErrorRequestType.unknown,
+          message: 'البريد الإلكتروني مستخدم بالفعل',
+          errorType: ErrorRequestType.validationError,
         );
       }
 
-      return HelperResponse.success(
-        message: 'تم إضافة المسؤول بنجاح',
-        data: adminMap,
-      );
+      final now = DateTime.now().toIso8601String();
+      final passwordHash = _hashPassword(sendData.password!);
+      final token = _generateToken(sendData.email!);
+
+      final id = await _dbHelper.table('admins').insert({
+        'name': sendData.name,
+        'email': sendData.email,
+        'password_hash': passwordHash,
+        'token': token,
+        'role_id': sendData.roleId,
+        'is_active': sendData.isActive! ? 1 : 0,
+        'created_at': now,
+        'updated_at': now,
+      });
+
+      final newAdminMap = await _dbHelper
+          .table('admins')
+          .where('id', id)
+          .first();
+      return HelperResponse.success(data: Admin.fromMap(newAdminMap!));
     } catch (e) {
       return HelperResponse.error(
-        message: 'حصل خطأ ما',
+        message: 'حدث خطأ أثناء الإضافة',
         errorType: ErrorRequestType.unknown,
       );
     }
   }
 
-  @override
-  Future<HelperResponse<bool>> checkEmail(String email) async {
-    try {
-      final adminMap = await _dbHelper
-          .table('admins')
-          .where('email', email)
-          .first();
-      if (adminMap == null) {
-        return HelperResponse.success(
-          data: true,
-          message: 'تم إضافة المسؤول بنجاح',
-        );
-      } else {
-        return HelperResponse.error(
-          message: 'البريد الالكتروني موجود بالفعل',
-          errorType: ErrorRequestType.unknown,
-        );
-      }
-    } catch (e) {
-      return HelperResponse.error(
-        message: 'حصل خطأ ما',
-        errorType: ErrorRequestType.unknown,
-      );
-    }
+  String _hashPassword(String password) {
+    final bytes = utf8.encode(password);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  String _generateToken(String email) {
+    final bytes = utf8.encode('$email${DateTime.now().millisecondsSinceEpoch}');
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 }

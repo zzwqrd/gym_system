@@ -9,12 +9,12 @@ class LayoutView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = sl<LayoutCubit>();
     return BlocProvider(
-      create: (context) => sl<LayoutCubit>(),
-      child: BlocConsumer<LayoutCubit, LayoutStates>(
-        listener: (context, state) {},
+      create: (context) => cubit,
+      child: BlocBuilder<LayoutCubit, LayoutStates>(
+        buildWhen: (previous, current) => current is LayoutChangeBottomNavState,
         builder: (context, state) {
-          var cubit = LayoutCubit.get(context);
           return Scaffold(
             body: cubit.screens[cubit.currentIndex],
             bottomNavigationBar: BottomNavigationBar(

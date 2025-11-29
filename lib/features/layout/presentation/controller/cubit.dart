@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gym_system/features/home/presentation/pages/view.dart';
 import 'package:gym_system/features/layout/presentation/controller/state.dart';
 
+import '../../../admin/list/presentation/pages/view.dart';
+import '../../../user/list/presentation/pages/view.dart';
+
 class LayoutCubit extends Cubit<LayoutStates> {
   LayoutCubit() : super(LayoutInitialState());
 
@@ -12,8 +15,8 @@ class LayoutCubit extends Cubit<LayoutStates> {
 
   List<Widget> screens = [
     const HomeView(),
-    const Text('Users'),
-    const Text('Admins'),
+    const UserListView(),
+    const AdminListView(),
   ];
 
   void changeBottomNav(int index) {
