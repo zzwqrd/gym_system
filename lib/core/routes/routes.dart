@@ -14,13 +14,14 @@ class RouteNames {
   static const String bookingDetails = '/bookingDetails';
   static const String transactions = '/transactions';
   static const String addHolidays = '/addHolidays';
-}
 
-// class NamedRoutes {
-//   static NamedRoutes get i => NamedRoutes.i_internal();
-//   NamedRoutes.i_internal();
-//   final test = "/test_data";
-//   final splash = "/splash";
-//   final login = "/login";
-//   final home = "/home";
-// }
+  // Admin Features
+  static const String adminList = '/admin_list';
+  static const String addAdmin = '/add_admin';
+  static const String editAdmin = '/edit_admin';
+
+  // User Features
+  static const String userList = '/user_list';
+  static const String addUser = '/add_user';
+  static const String editUser = '/edit_user';
+}

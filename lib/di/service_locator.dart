@@ -16,8 +16,4 @@ Future<void> setupServiceLocator() async {
   sl.registerFactory<LoginController>(() => LoginController());
   sl.registerFactory<RegisterController>(() => RegisterController());
   sl.registerFactory<LayoutCubit>(() => LayoutCubit());
-
-  // sl.registerFactory<GetDataUserCubit>(() => GetDataUserCubit());
-
-  // sl.registerFactory<AuthCubit>(() => AuthCubit());
 }

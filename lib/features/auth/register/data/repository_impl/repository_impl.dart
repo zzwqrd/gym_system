@@ -1,4 +1,4 @@
-import '../../../../../core/database/helper_respons.dart';
+import '../../../../../core/resources/helper_respons.dart';
 import '../../domin/repositories/repository.dart';
 import '../data_source/data_source.dart';
 import '../model/send_data.dart';

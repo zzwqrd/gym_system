@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gym_system/core/utils/ui_extensions/extensions_init.dart';
-import 'package:gym_system/features/home/presentation/widgets/category_item.dart';
-import 'package:gym_system/features/home/presentation/widgets/legend_item.dart';
-import 'package:gym_system/features/home/presentation/widgets/recent_item.dart';
+
+import '../widgets/category_item.dart';
+import '../widgets/legend_item.dart';
+import '../widgets/recent_item.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});

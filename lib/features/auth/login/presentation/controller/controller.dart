@@ -18,8 +18,8 @@ class LoginController extends Cubit<LoginState> {
   final pref = sl<SharedPreferences>();
   final LoginUsecase _loginUseCase = LoginUsecaseImpl();
   SendData loginModel = SendData(
-    email: "a@a.coma".trim(),
-    password: "a@a.coma".trim(),
+    email: "admin@admin.com".trim(),
+    password: "1234567".trim(),
   );
 
   Future<void> loginUser() async {
