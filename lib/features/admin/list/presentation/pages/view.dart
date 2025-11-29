@@ -34,7 +34,7 @@ class _AdminListViewState extends State<AdminListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('المسؤولين')),
+      appBar: AppBar(title: 'المسؤولين'.h6),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to Add Admin Feature
@@ -49,14 +49,13 @@ class _AdminListViewState extends State<AdminListView> {
             controller: _searchController,
             prefixIcon: const Icon(Icons.search),
             onChanged: (val) {
-              // Trigger a rebuild to re-filter the list based on the search query
               setState(() {});
             },
             isRequired: false,
           ).paddingAll(16),
           Expanded(
             child: BlocBuilder<AdminListController, AdminListState>(
-              bloc: _adminListController, // Use the instance from initState
+              bloc: _adminListController,
               builder: (context, state) {
                 if (state.requestState.isLoading && state.data.isEmpty) {
                   return const CircularProgressIndicator().center;
@@ -64,8 +63,7 @@ class _AdminListViewState extends State<AdminListView> {
                   return Text(state.errorMessage).center;
                 } else if (state.data.isEmpty &&
                     !state.requestState.isLoading) {
-                  // Only show 'لا يوجد بيانات' if not loading and data is truly empty
-                  return const Text('لا يوجد بيانات').center;
+                  return 'لا يوجد بيانات'.bodyLarge().center;
                 }
 
                 final filteredList = state.data.where((admin) {
@@ -75,12 +73,11 @@ class _AdminListViewState extends State<AdminListView> {
                 }).toList();
 
                 if (filteredList.isEmpty && _searchController.text.isNotEmpty) {
-                  return const Text('لا توجد نتائج للبحث').center;
+                  return 'لا توجد نتائج للبحث'.bodyLarge().center;
                 } else if (filteredList.isEmpty &&
                     _searchController.text.isEmpty &&
                     !state.requestState.isLoading) {
-                  // This case should be covered by the 'لا يوجد بيانات' above, but as a fallback
-                  return const Text('لا يوجد بيانات').center;
+                  return 'لا يوجد بيانات'.bodyLarge().center;
                 }
 
                 return ListView.builder(
@@ -97,25 +94,19 @@ class _AdminListViewState extends State<AdminListView> {
                         showDialog(
                           context: context,
                           builder: (ctx) => AlertDialog(
-                            title: const Text('تأكيد الحذف'),
-                            content: const Text(
-                              'هل أنت متأكد من حذف هذا المسؤول؟',
-                            ),
+                            title: 'تأكيد الحذف'.h6,
+                            content: 'هل أنت متأكد من حذف هذا المسؤول؟'.body,
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(ctx),
-                                child: const Text('إلغاء'),
+                                child: 'إلغاء'.body,
                               ),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(ctx);
-                                  // Ensure the controller instance is used
                                   _adminListController.deleteAdmin(admin.id);
                                 },
-                                child: const Text(
-                                  'حذف',
-                                  style: TextStyle(color: Colors.red),
-                                ),
+                                child: 'حذف'.body,
                               ),
                             ],
                           ),
