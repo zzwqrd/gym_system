@@ -16,7 +16,7 @@ class AdminListDataSourceImpl implements AdminListDataSource {
     try {
       final result = await _dbHelper
           .table('admins')
-          .orderBy('id', direction: "desc")
+          .orderBy('id', direction: "asc")
           .get();
       final admins = result.map((e) => Admin.fromMap(e)).toList();
       return HelperResponse.success(data: admins);

@@ -45,9 +45,8 @@ class AppRoutes {
       case RouteNames.adminDetails:
         final args = settings.args;
         final adminId = args['adminId'] as int;
-        final admin = args['admin'];
         return AppHelperFunctions().fadeTransition(
-          page: AdminDetailsView(adminId: adminId, admin: admin),
+          page: AdminDetailsView(adminId: adminId),
         );
 
       // User Features
