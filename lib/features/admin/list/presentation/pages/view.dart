@@ -5,6 +5,7 @@ import '../../../../../../core/utils/ui_extensions/extensions_init.dart';
 import '../../../../../di/service_locator.dart';
 import '../controller/controller.dart';
 import '../controller/state.dart';
+import '../../../../../../core/routes/routes.dart';
 import '../widgets/admin_card.dart';
 
 class AdminListView extends StatefulWidget {
@@ -16,13 +17,12 @@ class AdminListView extends StatefulWidget {
 
 class _AdminListViewState extends State<AdminListView> {
   final TextEditingController _searchController = TextEditingController();
-  late final AdminListController _adminListController;
+  final controller = sl<AdminListController>();
 
   @override
   void initState() {
     super.initState();
-    _adminListController = sl<AdminListController>();
-    _adminListController.getAdmins();
+    controller.getAdmins();
   }
 
   @override
@@ -37,8 +37,10 @@ class _AdminListViewState extends State<AdminListView> {
       appBar: AppBar(title: 'المسؤولين'.h6),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to Add Admin Feature
-          // Navigator.pushNamed(context, RouteNames.addAdmin);
+          Navigator.pushNamed(
+            context,
+            RouteNames.addAdmin,
+          ).then((_) => controller.getAdmins());
         },
         child: const Icon(Icons.add),
       ),
@@ -49,35 +51,33 @@ class _AdminListViewState extends State<AdminListView> {
             controller: _searchController,
             prefixIcon: const Icon(Icons.search),
             onChanged: (val) {
+              // Trigger a rebuild to apply search filter
               setState(() {});
             },
             isRequired: false,
           ).paddingAll(16),
           Expanded(
             child: BlocBuilder<AdminListController, AdminListState>(
-              bloc: _adminListController,
+              bloc: controller,
               builder: (context, state) {
-                if (state.requestState.isLoading && state.data.isEmpty) {
+                if (state.requestState.isLoading) {
                   return const CircularProgressIndicator().center;
                 } else if (state.requestState.isError) {
                   return Text(state.errorMessage).center;
-                } else if (state.data.isEmpty &&
-                    !state.requestState.isLoading) {
-                  return 'لا يوجد بيانات'.bodyLarge().center;
                 }
 
+                final query = _searchController.text.toLowerCase();
                 final filteredList = state.data.where((admin) {
-                  final query = _searchController.text.toLowerCase();
                   return admin.name.toLowerCase().contains(query) ||
                       admin.email.toLowerCase().contains(query);
                 }).toList();
 
-                if (filteredList.isEmpty && _searchController.text.isNotEmpty) {
-                  return 'لا توجد نتائج للبحث'.bodyLarge().center;
-                } else if (filteredList.isEmpty &&
-                    _searchController.text.isEmpty &&
-                    !state.requestState.isLoading) {
-                  return 'لا يوجد بيانات'.bodyLarge().center;
+                if (filteredList.isEmpty) {
+                  if (query.isNotEmpty) {
+                    return 'لا توجد نتائج للبحث'.bodyLarge().center;
+                  } else {
+                    return 'لا يوجد بيانات'.bodyLarge().center;
+                  }
                 }
 
                 return ListView.builder(
@@ -86,9 +86,19 @@ class _AdminListViewState extends State<AdminListView> {
                     final admin = filteredList[index];
                     return AdminCard(
                       admin: admin,
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          RouteNames.adminDetails,
+                          arguments: {'adminId': admin.id, 'admin': admin},
+                        );
+                      },
                       onEdit: () {
-                        // Navigate to Edit Admin Feature
-                        // Navigator.pushNamed(context, RouteNames.editAdmin, arguments: admin);
+                        Navigator.pushNamed(
+                          context,
+                          RouteNames.editAdmin,
+                          arguments: {'admin': admin},
+                        ).then((_) => controller.getAdmins());
                       },
                       onDelete: () {
                         showDialog(
@@ -104,7 +114,7 @@ class _AdminListViewState extends State<AdminListView> {
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(ctx);
-                                  _adminListController.deleteAdmin(admin.id);
+                                  controller.deleteAdmin(admin.id);
                                 },
                                 child: 'حذف'.body,
                               ),

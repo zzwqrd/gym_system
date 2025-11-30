@@ -28,12 +28,11 @@ class UsersSeeder implements Seeder {
 
     final users = [
       {
-        'username': 'superadmin',
+        'name': 'Super Admin',
         'email': 'admin@example.com',
-        'password_hash': _hashPassword(), // غيّرها حسب الهاش المناسب
-        'first_name': 'Super',
-        'last_name': 'Admin',
+        'password_hash': _hashPassword(),
         'phone': '01000000000',
+        'national_id': '12345678901234',
         'token': _generateToken('admin@example.com'),
         'avatar': null,
         'is_active': 1,
@@ -43,13 +42,12 @@ class UsersSeeder implements Seeder {
         'updated_at': now,
       },
       {
-        'username': 'editoruser',
+        'name': 'Editor User',
         'email': 'editor@example.com',
         'password_hash': _hashPassword(),
-        'first_name': 'Editor',
-        'last_name': 'User',
-        'token': _generateToken('editor@example.com'),
         'phone': '01100000000',
+        'national_id': '98765432109876',
+        'token': _generateToken('editor@example.com'),
         'avatar': null,
         'is_active': 0,
         'is_verified': 1,

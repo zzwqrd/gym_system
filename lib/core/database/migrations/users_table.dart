@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../builders/column_type.dart';
@@ -9,23 +8,21 @@ import 'migration.dart';
 // after refactoring with TableBuilder
 class CreateUsersTable extends Migration {
   @override
-  String get name {
-    final now = DateTime.now();
-    final formatter = DateFormat('yyyy_MM_dd_HHmmss');
-    return '${formatter.format(now)}_create_users_table';
-  }
+  String get name => '2025_01_01_000001_create_users_table';
 
   @override
   Future<void> up(DatabaseExecutor db) async {
+    // Drop table if exists to ensure fresh schema
+    await TableBuilder(db, 'users').drop();
+
     await TableBuilder(db, 'users')
         .addColumn('id', ColumnType.primaryKey)
-        .addColumn('username', ColumnType.text, isNotNull: true, isUnique: true)
+        .addColumn('name', ColumnType.text, isNotNull: true)
         .addColumn('email', ColumnType.text, isNotNull: true, isUnique: true)
         .addColumn('password_hash', ColumnType.text, isNotNull: true)
-        .addColumn('token', ColumnType.text, isNotNull: true, isUnique: true)
-        .addColumn('first_name', ColumnType.text)
-        .addColumn('last_name', ColumnType.text)
         .addColumn('phone', ColumnType.text)
+        .addColumn('national_id', ColumnType.text)
+        .addColumn('token', ColumnType.text, isUnique: true)
         .addColumn('avatar', ColumnType.text)
         .addColumn('is_active', ColumnType.boolean, defaultValue: '1')
         .addColumn('is_verified', ColumnType.boolean, defaultValue: '0')
@@ -40,7 +37,7 @@ class CreateUsersTable extends Migration {
           ColumnType.timestamp,
           defaultValue: "(strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))",
         )
-        .addIndex('username')
+        .addIndex('name')
         .addIndex('email', unique: true)
         .addIndex('is_active')
         .addIndex('token', unique: true)

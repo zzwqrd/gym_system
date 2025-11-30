@@ -19,9 +19,11 @@ class RouteNames {
   static const String adminList = '/admin_list';
   static const String addAdmin = '/add_admin';
   static const String editAdmin = '/edit_admin';
+  static const String adminDetails = '/admin_details';
 
   // User Features
   static const String userList = '/user_list';
   static const String addUser = '/add_user';
   static const String editUser = '/edit_user';
+  static const String userDetails = '/user_details';
 }

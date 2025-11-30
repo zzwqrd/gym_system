@@ -14,7 +14,10 @@ class AdminListDataSourceImpl implements AdminListDataSource {
   @override
   Future<HelperResponse<List<Admin>>> getAdmins() async {
     try {
-      final result = await _dbHelper.table('admins').get();
+      final result = await _dbHelper
+          .table('admins')
+          .orderBy('id', direction: "desc")
+          .get();
       final admins = result.map((e) => Admin.fromMap(e)).toList();
       return HelperResponse.success(data: admins);
     } catch (e) {

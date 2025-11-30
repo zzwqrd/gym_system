@@ -42,7 +42,7 @@ class DBHelper {
 
       return await openDatabase(
         path,
-        version: 1, // تحديث رقم الإصدار حسب الحاجة
+        version: 2, // تحديث رقم الإصدار حسب الحاجة
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
         onConfigure: _onConfigure,

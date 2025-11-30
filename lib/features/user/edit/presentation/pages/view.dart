@@ -5,7 +5,7 @@ import '../../../../../../commonWidget/button_animation/LoadingButton.dart';
 import '../../../../../../commonWidget/text_input.dart';
 import '../../../../../../core/utils/enums.dart';
 import '../../../../../../core/utils/ui_extensions/extensions_init.dart';
-import '../../data/model/model.dart';
+import '../../../list/data/model/model.dart';
 import '../../data/model/send_data.dart';
 import '../controller/controller.dart';
 import '../controller/state.dart';

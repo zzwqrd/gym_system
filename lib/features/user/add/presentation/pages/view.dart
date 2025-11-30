@@ -22,6 +22,7 @@ class _AddUserViewState extends State<AddUserView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _nationalIdController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isActive = true;
 
   @override
@@ -30,6 +31,7 @@ class _AddUserViewState extends State<AddUserView> {
     _emailController.dispose();
     _phoneController.dispose();
     _nationalIdController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -79,6 +81,12 @@ class _AddUserViewState extends State<AddUserView> {
                     fieldType: FieldType.number,
                     isRequired: false,
                   ).pb4,
+                  AppCustomForm(
+                    title: 'كلمة المرور',
+                    controller: _passwordController,
+                    fieldType: FieldType.password,
+                    isRequired: true,
+                  ).pb4,
                   SwitchListTile(
                     title: const Text('نشط'),
                     value: _isActive,
@@ -92,6 +100,7 @@ class _AddUserViewState extends State<AddUserView> {
                         final sendData = SendData(
                           name: _nameController.text,
                           email: _emailController.text,
+                          password: _passwordController.text,
                           phone: _phoneController.text,
                           nationalId: _nationalIdController.text.isEmpty
                               ? null

@@ -42,8 +42,9 @@ class MigrationManager {
 
   Future<void> runPendingMigrations(Database db, {required int batch}) async {
     final applied = await _getAppliedMigrations(db);
-    final pending =
-        _migrations.where((m) => !applied.contains(m.name)).toList();
+    final pending = _migrations
+        .where((m) => !applied.contains(m.name))
+        .toList();
 
     if (pending.isEmpty) {
       print('✅ No pending migrations');
@@ -70,7 +71,10 @@ class MigrationManager {
   }
 
   Future<void> _runMigration(
-      Database db, Migration migration, int batch) async {
+    Database db,
+    Migration migration,
+    int batch,
+  ) async {
     try {
       print('🔧 Running migration: ${migration.name}');
 
@@ -100,7 +104,8 @@ class MigrationManager {
     );
 
     print(
-        '🔄 Rolling back ${migrations.length} migrations from batch $batch...');
+      '🔄 Rolling back ${migrations.length} migrations from batch $batch...',
+    );
 
     for (final record in migrations) {
       final name = record['name'] as String;
@@ -122,8 +127,9 @@ class MigrationManager {
   }
 
   Future<void> rollbackLastBatch(Database db) async {
-    final result =
-        await db.rawQuery('SELECT MAX(batch) as last_batch FROM migrations');
+    final result = await db.rawQuery(
+      'SELECT MAX(batch) as last_batch FROM migrations',
+    );
     final lastBatch = result.first['last_batch'] as int?;
 
     if (lastBatch != null) {

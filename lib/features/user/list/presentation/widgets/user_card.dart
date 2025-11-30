@@ -6,18 +6,21 @@ class UserCard extends StatelessWidget {
   final User user;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final VoidCallback? onTap;
 
   const UserCard({
     super.key,
     required this.user,
     required this.onEdit,
     required this.onDelete,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: onTap,
         leading: CircleAvatar(
           child: Text(user.name.isNotEmpty ? user.name[0].toUpperCase() : ''),
         ),

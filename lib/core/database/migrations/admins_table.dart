@@ -27,6 +27,9 @@ class CreateAdminsTable extends Migration {
 
   @override
   Future<void> up(DatabaseExecutor db) async {
+    // Drop table if exists to ensure fresh schema
+    await TableBuilder(db, 'admins').drop();
+
     await TableBuilder(db, 'admins')
         .addColumn('id', ColumnType.primaryKey)
         .addColumn('name', ColumnType.text, isNotNull: true)

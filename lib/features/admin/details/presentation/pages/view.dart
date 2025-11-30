@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/utils/enums.dart';
 import '../../../../../../core/utils/ui_extensions/extensions_init.dart';
-import '../../data/model/model.dart';
+import '../../../list/data/model/model.dart';
 import '../controller/controller.dart';
 import '../controller/state.dart';
 
@@ -42,7 +42,7 @@ class _AdminDetailsViewState extends State<AdminDetailsView> {
                   } else if (state.data == null) {
                     return const Text('لا توجد بيانات').center;
                   }
-                  return _buildContent(state.data!);
+                  return _buildContent(state.data! as Admin);
                 },
               ),
       ),

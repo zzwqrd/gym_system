@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:gym_system/features/auth/login/presentation/pages/view.dart';
-import 'package:gym_system/features/layout/presentation/pages/view.dart';
-import 'package:gym_system/features/splash/presentation/pages/view.dart';
-
+import '../../features/admin/add/presentation/pages/view.dart';
+import '../../features/admin/details/data/model/model.dart' as admin_details;
+import '../../features/admin/details/presentation/pages/view.dart';
+import '../../features/admin/edit/data/model/model.dart' as admin_edit;
+import '../../features/admin/edit/presentation/pages/view.dart';
+import '../../features/admin/list/presentation/pages/view.dart';
+import '../../features/auth/login/presentation/pages/view.dart';
 import '../../features/auth/register/presentation/pages/view.dart';
+import '../../features/layout/presentation/pages/view.dart';
+import '../../features/splash/presentation/pages/view.dart';
+import '../../features/user/add/presentation/pages/view.dart';
+import '../../features/user/details/data/model/model.dart' as user_details;
+import '../../features/user/details/presentation/pages/view.dart';
+import '../../features/user/edit/data/model/model.dart' as user_edit;
+import '../../features/user/edit/presentation/pages/view.dart';
+import '../../features/user/list/presentation/pages/view.dart';
+import '../extensions/navigation.dart';
+import '../utils/app_helper_functions.dart';
 import 'routes.dart';
 
 class AppRoutes {
@@ -12,65 +25,52 @@ class AppRoutes {
       case RouteNames.splash:
         return MaterialPageRoute<dynamic>(builder: (_) => const SplashView());
       case RouteNames.login:
-        return MaterialPageRoute<dynamic>(builder: (_) => const LoginView());
+        return AppHelperFunctions().fadeTransition(page: const LoginView());
       case RouteNames.register:
-        return MaterialPageRoute<dynamic>(builder: (_) => const RegisterView());
+        return AppHelperFunctions().fadeTransition(page: const RegisterView());
       case RouteNames.mainLayout:
-        return MaterialPageRoute<dynamic>(builder: (_) => const LayoutView());
+        return AppHelperFunctions().fadeTransition(page: const LayoutView());
+
+      // Admin Features
+      case RouteNames.adminList:
+        return AppHelperFunctions().fadeTransition(page: const AdminListView());
+      case RouteNames.addAdmin:
+        return AppHelperFunctions().fadeTransition(page: const AddAdminView());
+      case RouteNames.editAdmin:
+        final args = settings.args;
+        final admin = args['admin'] as admin_edit.Admin;
+        return AppHelperFunctions().fadeTransition(
+          page: EditAdminView(admin: admin),
+        );
+      case RouteNames.adminDetails:
+        final args = settings.args;
+        final adminId = args['adminId'] as int;
+        final admin = args['admin'];
+        return AppHelperFunctions().fadeTransition(
+          page: AdminDetailsView(adminId: adminId, admin: admin),
+        );
+
+      // User Features
+      case RouteNames.userList:
+        return AppHelperFunctions().fadeTransition(page: const UserListView());
+      case RouteNames.addUser:
+        return AppHelperFunctions().fadeTransition(page: const AddUserView());
+      case RouteNames.editUser:
+        final args = settings.args;
+        final user = args['user'];
+        return AppHelperFunctions().fadeTransition(
+          page: EditUserView(user: user),
+        );
+      case RouteNames.userDetails:
+        final args = settings.args;
+        final userId = args['userId'] as int;
+        final user = args['user'];
+        return AppHelperFunctions().fadeTransition(
+          page: UserDetailsView(userId: userId, user: user),
+        );
 
       default:
         return MaterialPageRoute<dynamic>(builder: (_) => const SplashView());
     }
   }
 }
-   // case RouteNames.mainLayout
-      //   return AppHelperFunctions().fadeTransition(page: const LayoutView());
-      // case RouteNames.onboarding:
-      //   return MaterialPageRoute<dynamic>(
-      //     builder: (_) => const OnboardingScreen(),
-      //   );
-      // case RouteNames.login:
-      //   return MaterialPageRoute<dynamic>(builder: (_) => const LoginScreen());
-      // case RouteNames.manageWorkingDays:
-      //   return AppHelperFunctions().fadeTransition(
-      //     page: const ManageWorkingDaysScreen(),
-      //   );
-      // case RouteNames.forgotPassword:
-      //   return AppHelperFunctions().fadeTransition(
-      //     page: const ForgotPasswordScreen(),
-      //   );
-      // case RouteNames.otp:
-      //   final Map<String, dynamic> args =
-      //       settings.arguments! as Map<String, dynamic>;
-      //   final String phoneNumber = args['phoneNumber'] as String;
-      //   final int countryCode = args['countryCode'] as int;
-      //   return AppHelperFunctions().fadeTransition(
-      //     page: OtpScreen(phoneNumber: phoneNumber, countryCode: countryCode),
-      //   );
-      // case RouteNames.addNewPassword:
-      //   final Map<String, dynamic> args =
-      //       settings.arguments! as Map<String, dynamic>;
-      //   final int countryCode = args['countryCode'] as int? ?? 1;
-      //   return AppHelperFunctions().fadeTransition(
-      //     page: AddNewPasswordScreen(countryCode: countryCode),
-      //   );
-      // case RouteNames.bookingDetails:
-      //   final Map<String, dynamic> args =
-      //       settings.arguments! as Map<String, dynamic>;
-      //   final int bookId = args['bookId'] as int;
-      //   final String customerName = args['customerName'] as String? ?? '';
-
-      //   return AppHelperFunctions().fadeTransition(
-      //     page: BookingDetailsScreen(
-      //       bookId: bookId,
-      //       customerName: customerName,
-      //     ),
-      //   );
-      // case RouteNames.transactions:
-      //   return AppHelperFunctions().fadeTransition(
-      //     page: const TransactionsScreen(),
-      //   );
-      // case RouteNames.addHolidays:
-      //   return AppHelperFunctions().fadeTransition(
-      //     page: const AddHolidaysScreen(),
-      //   );
