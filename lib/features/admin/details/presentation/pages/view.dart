@@ -5,7 +5,7 @@ import '../../../../../../core/utils/ui_extensions/extensions_init.dart';
 import '../../../../../di/service_locator.dart';
 import '../controller/controller.dart';
 import '../controller/state.dart';
-import '../../data/model/model.dart';
+import '../widgets/build_content.dart';
 
 class AdminDetailsView extends StatefulWidget {
   final int adminId;
@@ -40,43 +40,10 @@ class _AdminDetailsViewState extends State<AdminDetailsView> {
           } else if (state.data == null) {
             return const Text('لا توجد بيانات').center;
           } else {
-            return _buildContent(state.data!);
+            return AdminDetailsContent(admin: state.data!);
           }
         },
       ),
     );
-  }
-
-  Widget _buildContent(Admin admin) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        CircleAvatar(
-          radius: 40,
-          child: Text(
-            admin.name[0].toUpperCase(),
-            style: const TextStyle(fontSize: 32),
-          ),
-        ).center.pb6,
-        _buildDetailItem('الاسم', admin.name),
-        _buildDetailItem('البريد الإلكتروني', admin.email),
-        _buildDetailItem('الحالة', admin.isActive ? 'نشط' : 'غير نشط'),
-        _buildDetailItem(
-          'تاريخ الإنشاء',
-          admin.createdAt.toString().split(' ')[0],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDetailItem(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label).labelMedium(color: Colors.grey),
-        Text(value).h6,
-        const Divider(),
-      ],
-    ).pb4;
   }
 }
