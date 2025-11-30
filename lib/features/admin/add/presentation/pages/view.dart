@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym_system/commonWidget/toast_helper.dart';
 import '../../../../../../commonWidget/button_animation/LoadingButton.dart';
 import '../../../../../../commonWidget/text_input.dart';
-import '../../../../../../core/utils/enums.dart';
 import '../../../../../../core/utils/ui_extensions/extensions_init.dart';
 import '../../data/model/send_data.dart';
 import '../controller/controller.dart';
@@ -39,12 +39,13 @@ class _AddAdminViewState extends State<AddAdminView> {
         appBar: AppBar(title: const Text('إضافة مسؤول')),
         body: BlocConsumer<AddAdminController, AddAdminState>(
           listener: (context, state) {
-            if (state.requestState == RequestState.done) {
+            if (state.requestState.isDone) {
               Navigator.pop(context);
-            } else if (state.requestState == RequestState.error) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
+            } else if (state.requestState.isError) {
+              FlashHelper.showToast(
+                state.errorMessage,
+                type: MessageTypeTost.fail,
+              );
             }
           },
           builder: (context, state) {
