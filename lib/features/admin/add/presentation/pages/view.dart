@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym_system/commonWidget/toast_helper.dart';
+import 'package:gym_system/di/service_locator.dart';
 import '../../../../../../commonWidget/button_animation/LoadingButton.dart';
 import '../../../../../../commonWidget/text_input.dart';
 import '../../../../../../core/utils/ui_extensions/extensions_init.dart';
@@ -33,51 +34,72 @@ class _AddAdminViewState extends State<AddAdminView> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = sl<AddAdminController>();
     return BlocProvider(
-      create: (context) => AddAdminController(),
+      create: (context) => bloc,
       child: Scaffold(
         appBar: AppBar(title: const Text('إضافة مسؤول')),
-        body: BlocConsumer<AddAdminController, AddAdminState>(
-          listener: (context, state) {
-            if (state.requestState.isDone) {
-              Navigator.pop(context);
-            } else if (state.requestState.isError) {
-              FlashHelper.showToast(
-                state.errorMessage,
-                type: MessageTypeTost.fail,
-              );
-            }
-          },
-          builder: (context, state) {
-            return Form(
-              key: _formKey,
-              child: ListView(
-                padding: EdgeInsets.all(16.w),
-                children: [
-                  AppCustomForm(
-                    title: 'الاسم',
-                    controller: _nameController,
-                    fieldType: FieldType.name,
-                    isRequired: true,
-                  ).pb4,
-                  AppCustomForm(
-                    title: 'البريد الإلكتروني',
-                    controller: _emailController,
-                    fieldType: FieldType.email,
-                    isRequired: true,
-                  ).pb4,
-                  AppCustomForm(
-                    title: 'كلمة المرور',
-                    controller: _passwordController,
-                    fieldType: FieldType.password,
-                    isRequired: true,
-                  ).pb4,
-                  SwitchListTile(
-                    title: 'نشط'.h6,
-                    value: _isActive,
-                    onChanged: (val) => setState(() => _isActive = val),
-                  ).pb6,
-                  LoadingButton(
+        body: Form(
+          key: _formKey,
+          child: ListView(
+            padding: EdgeInsets.all(16.w),
+            children: [
+              AppCustomForm(
+                title: 'الاسم',
+                controller: _nameController,
+                fieldType: FieldType.name,
+                isRequired: true,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'الاسم مطلوب';
+                  }
+                  return null;
+                },
+              ).pb4,
+              AppCustomForm(
+                title: 'البريد الإلكتروني',
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'البريد الإلكتروني مطلوب';
+                  }
+                  return null;
+                },
+                controller: _emailController,
+                fieldType: FieldType.email,
+                isRequired: true,
+              ).pb4,
+              AppCustomForm(
+                title: 'كلمة المرور',
+                controller: _passwordController,
+                fieldType: FieldType.password,
+                isRequired: true,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'كلمة المرور مطلوبة';
+                  }
+                  return null;
+                },
+              ).pb4,
+              SwitchListTile(
+                key: ValueKey(_isActive),
+                title: 'نشط'.h6,
+                value: _isActive,
+                onChanged: (val) => setState(() => _isActive = val),
+              ).pb6,
+              BlocConsumer<AddAdminController, AddAdminState>(
+                bloc: bloc,
+                listener: (context, state) {
+                  if (state.requestState.isDone) {
+                    Navigator.pop(context);
+                  } else if (state.requestState.isError) {
+                    FlashHelper.showToast(
+                      state.errorMessage,
+                      type: MessageTypeTost.fail,
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return LoadingButton(
                     title: 'إضافة',
                     isAnimating: state.requestState.isLoading,
                     onTap: () {
@@ -89,14 +111,14 @@ class _AddAdminViewState extends State<AddAdminView> {
                           roleId: 1, // Default role for now
                           isActive: _isActive,
                         );
-                        context.read<AddAdminController>().addAdmin(sendData);
+                        bloc.addAdmin(sendData);
                       }
                     },
-                  ),
-                ],
+                  );
+                },
               ),
-            );
-          },
+            ],
+          ),
         ),
       ),
     );

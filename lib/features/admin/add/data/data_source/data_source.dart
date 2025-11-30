@@ -16,7 +16,6 @@ class AddAdminDataSourceImpl implements AddAdminDataSource {
   @override
   Future<HelperResponse<Admin>> addAdmin(SendData sendData) async {
     try {
-      // Check if email exists
       final exists = await _dbHelper
           .table('admins')
           .where('email', sendData.email)
