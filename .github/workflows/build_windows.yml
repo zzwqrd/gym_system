@@ -1,9 +1,9 @@
-name: Build Windows Flutter App
+name: Build Windows & Android App
 
 on:
-  workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]   # أي Push على main يشغل الـ workflow
+  workflow_dispatch:        # تشغيل يدوي لو حبيت
 
 jobs:
   build-windows:
@@ -21,15 +21,62 @@ jobs:
       - name: Enable Windows Desktop
         run: flutter config --enable-windows-desktop
 
-      - name: Get Packages
+      - name: Install Packages
         run: flutter pub get
 
       - name: Build Windows Release
         run: flutter build windows --release
 
-      - name: Upload EXE Artifact
+      - name: Upload Windows EXE
         uses: actions/upload-artifact@v4
         with:
-          name: Windows-Build
+          name: Windows-App
           path: build/windows/x64/runner/Release/
-          compression-level: 6
+
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install Packages
+        run: flutter pub get
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-App
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  build-android-aab:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install Packages
+        run: flutter pub get
+
+      - name: Build Android App Bundle
+        run: flutter build appbundle --release
+
+      - name: Upload Android AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-AppBundle
+          path: build/app/outputs/bundle/release/app-release.aab
