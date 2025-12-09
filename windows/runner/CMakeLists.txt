@@ -16,6 +16,11 @@ add_executable(${BINARY_NAME} WIN32
   "runner.exe.manifest"
 )
 
+# ⬇⬇⬇ أضف هذين السطرين هنا ⬇⬇⬇
+set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
+set(CMAKE_INSTALL_OPENMP_LIBRARIES TRUE)
+# ⬆⬆⬆ نهاية الإضافة ⬆⬆⬆
+
 # Apply the standard set of build settings. This can be removed for applications
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})

@@ -24,7 +24,7 @@ jobs:
         run: flutter pub get
 
       - name: Build Windows Release
-        run: flutter build windows --release
+        run: flutter build windows --release --bundle-msvc-redist
 
       - name: Upload Windows EXE
         uses: actions/upload-artifact@v4
