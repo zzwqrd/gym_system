@@ -24,7 +24,14 @@ jobs:
         run: flutter pub get
 
       - name: Build Windows Release
-        run: flutter build windows --release --bundle-msvc-redist
+        run: flutter build windows --release
+
+      - name: Create README with instructions
+        run: |
+          echo "لتشغيل هذا التطبيق، قد تحتاج إلى تثبيت Microsoft Visual C++ Redistributable" > build/windows/x64/runner/Release/README.txt
+          echo "" >> build/windows/x64/runner/Release/README.txt
+          echo "قم بتنزيله من:" >> build/windows/x64/runner/Release/README.txt
+          echo "https://aka.ms/vs/17/release/vc_redist.x64.exe" >> build/windows/x64/runner/Release/README.txt
 
       - name: Upload Windows EXE
         uses: actions/upload-artifact@v4

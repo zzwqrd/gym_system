@@ -20,7 +20,13 @@ add_executable(${BINARY_NAME} WIN32
 set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
 set(CMAKE_INSTALL_OPENMP_LIBRARIES TRUE)
 # ⬆⬆⬆ نهاية الإضافة ⬆⬆⬆
-
+# بعد السطرين السابقين أضف:
+if(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
+    install(FILES ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+        DESTINATION "."
+        COMPONENT Runtime
+    )
+endif()
 # Apply the standard set of build settings. This can be removed for applications
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})
