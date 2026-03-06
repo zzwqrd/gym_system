@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:developer' as developer;
 
@@ -46,7 +43,11 @@ class DBHelper {
         onOpen: _onOpen,
       );
     } catch (e) {
-      developer.log('❌ Database initialization failed: $e', name: 'DBHelper', level: 2000);
+      developer.log(
+        '❌ Database initialization failed: $e',
+        name: 'DBHelper',
+        level: 2000,
+      );
       rethrow;
     }
   }
@@ -68,7 +69,10 @@ class DBHelper {
       await db.rawQuery('PRAGMA temp_store = MEMORY');
       developer.log('✅ Database optimizations applied', name: 'DBHelper');
     } catch (e) {
-      developer.log('⚠️ Could not apply database optimizations: $e', name: 'DBHelper');
+      developer.log(
+        '⚠️ Could not apply database optimizations: $e',
+        name: 'DBHelper',
+      );
     }
   }
 
@@ -87,39 +91,53 @@ class DBHelper {
       ]);
       await seederManager.run(db);
 
-      developer.log('✅ Database created successfully with seed data', name: 'DBHelper');
+      developer.log(
+        '✅ Database created successfully with seed data',
+        name: 'DBHelper',
+      );
     } catch (e) {
-      developer.log('❌ Database creation failed: $e', name: 'DBHelper', level: 2000);
+      developer.log(
+        '❌ Database creation failed: $e',
+        name: 'DBHelper',
+        level: 2000,
+      );
       rethrow;
     }
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     try {
-      developer.log('🔄 Upgrading database from v$oldVersion to v$newVersion...', name: 'DBHelper');
+      developer.log(
+        '🔄 Upgrading database from v$oldVersion to v$newVersion...',
+        name: 'DBHelper',
+      );
       final manager = MigrationManager();
       await manager.runPendingMigrations(db, batch: newVersion);
-      
+
       final seederManager = SeederManager([
         AddDefaultEditorUserSeeder(),
         AddMassiveCategoriesSeeder(),
       ]);
       await seederManager.run(db);
-      
+
       developer.log('✅ Database upgraded successfully', name: 'DBHelper');
     } catch (e) {
-      developer.log('❌ Database upgrade failed: $e', name: 'DBHelper', level: 2000);
+      developer.log(
+        '❌ Database upgrade failed: $e',
+        name: 'DBHelper',
+        level: 2000,
+      );
       rethrow;
     }
   }
 
-  /// ✅ FIX #3: تحويل table() إلى async لتجنب Null Pointer
-  Future<QueryBuilder> table(String tableName) async {
-    final db = await database;
-    return QueryBuilder(db, tableName);
+  /// ✅ Synchronous - ترجع QueryBuilder مباشرة وتمرر Future<Database> داخلياً
+  /// الاستخدام: _dbHelper.table('users').where(...).get()
+  QueryBuilder table(String tableName) {
+    return QueryBuilder.fromFuture(database, tableName);
   }
 
-  /// Alternative: للاستخدام المباشر في Transaction (لا يحتاج async)
+  /// للاستخدام المباشر في Transaction
   QueryBuilder tableWithExecutor(DatabaseExecutor executor, String tableName) {
     return QueryBuilder(executor, tableName);
   }

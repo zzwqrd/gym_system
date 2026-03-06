@@ -1,7 +1,9 @@
 import 'package:sqflite/sqflite.dart';
 
 class QueryBuilder {
-  final DatabaseExecutor _db;
+  /// يقبل DatabaseExecutor مباشرةً أو Future<DatabaseExecutor>
+  /// هذا يسمح لـ DBHelper.table() أن تكون synchronous
+  final Future<DatabaseExecutor> _dbFuture;
   final String _table;
 
   List<String> _columns = ['*'];
@@ -14,7 +16,11 @@ class QueryBuilder {
   int? _limitValue;
   int? _offsetValue;
 
-  QueryBuilder(this._db, this._table);
+  /// Constructor يقبل DatabaseExecutor مباشرةً (sync)
+  QueryBuilder(DatabaseExecutor db, this._table) : _dbFuture = Future.value(db);
+
+  /// Constructor يقبل Future<DatabaseExecutor> (async/lazy)
+  QueryBuilder.fromFuture(this._dbFuture, this._table);
 
   // ========== SELECT CLAUSES ========== //
 
@@ -189,7 +195,7 @@ class QueryBuilder {
 
   // ========== CHUNKING ========== //
   QueryBuilder clone() {
-    final copy = QueryBuilder(_db, _table);
+    final copy = QueryBuilder.fromFuture(_dbFuture, _table);
     copy._columns = List.from(_columns);
     copy._whereClauses = List.from(_whereClauses);
     copy._joinClauses = List.from(_joinClauses);
@@ -206,7 +212,7 @@ class QueryBuilder {
     void Function(QueryBuilder builder) group, {
     String boolean = 'AND',
   }) {
-    final groupBuilder = QueryBuilder(_db, _table);
+    final groupBuilder = QueryBuilder.fromFuture(_dbFuture, _table);
     group(groupBuilder);
     final groupClause = groupBuilder._buildWhereClause();
 
@@ -259,7 +265,8 @@ class QueryBuilder {
 
   Future<int> count([String column = '*']) async {
     try {
-      final result = await _db.rawQuery(
+      final db = await _dbFuture;
+      final result = await db.rawQuery(
         _buildCountQuery(column),
         _buildWhereArgs(),
       );
@@ -274,7 +281,8 @@ class QueryBuilder {
 
   Future<double> sum(String column) async {
     try {
-      final result = await _db.rawQuery(
+      final db = await _dbFuture;
+      final result = await db.rawQuery(
         _buildAggregateQuery('SUM', column),
         _buildWhereArgs(),
       );
@@ -288,7 +296,8 @@ class QueryBuilder {
 
   Future<double> avg(String column) async {
     try {
-      final result = await _db.rawQuery(
+      final db = await _dbFuture;
+      final result = await db.rawQuery(
         _buildAggregateQuery('AVG', column),
         _buildWhereArgs(),
       );
@@ -302,7 +311,8 @@ class QueryBuilder {
 
   Future<T?> max<T>(String column) async {
     try {
-      final result = await _db.rawQuery(
+      final db = await _dbFuture;
+      final result = await db.rawQuery(
         _buildAggregateQuery('MAX', column),
         _buildWhereArgs(),
       );
@@ -316,7 +326,8 @@ class QueryBuilder {
 
   Future<T?> min<T>(String column) async {
     try {
-      final result = await _db.rawQuery(
+      final db = await _dbFuture;
+      final result = await db.rawQuery(
         _buildAggregateQuery('MIN', column),
         _buildWhereArgs(),
       );
@@ -339,7 +350,8 @@ class QueryBuilder {
 
   Future<int> insert(Map<String, dynamic> values) async {
     try {
-      return await _db.insert(_table, values);
+      final db = await _dbFuture;
+      return await db.insert(_table, values);
     } catch (e) {
       print('❌ Insert failed: $e');
       rethrow;
@@ -348,7 +360,8 @@ class QueryBuilder {
 
   Future<int> insertOrIgnore(Map<String, dynamic> values) async {
     try {
-      return await _db.insert(
+      final db = await _dbFuture;
+      return await db.insert(
         _table,
         values,
         conflictAlgorithm: ConflictAlgorithm.ignore,
@@ -361,7 +374,8 @@ class QueryBuilder {
 
   Future<int> insertOrReplace(Map<String, dynamic> values) async {
     try {
-      return await _db.insert(
+      final db = await _dbFuture;
+      return await db.insert(
         _table,
         values,
         conflictAlgorithm: ConflictAlgorithm.replace,
@@ -378,8 +392,9 @@ class QueryBuilder {
     }
 
     try {
+      final db = await _dbFuture;
       final where = _buildWhereClause();
-      final result = await _db.update(
+      final result = await db.update(
         _table,
         values,
         where: where.query,
@@ -400,8 +415,9 @@ class QueryBuilder {
     }
 
     try {
+      final db = await _dbFuture;
       final where = _buildWhereClause();
-      final result = await _db.delete(
+      final result = await db.delete(
         _table,
         where: where.query,
         whereArgs: where.args,
@@ -417,7 +433,8 @@ class QueryBuilder {
 
   Future<void> truncate() async {
     try {
-      await _db.delete(_table);
+      final db = await _dbFuture;
+      await db.delete(_table);
     } catch (e) {
       print('❌ Truncate failed: $e');
       rethrow;
@@ -447,9 +464,10 @@ class QueryBuilder {
   // ========== QUERY BUILDING ========== //
 
   Future<List<Map<String, dynamic>>> _runSelectQuery() async {
+    final db = await _dbFuture;
     final query = _buildSelectQuery();
     final args = _buildWhereArgs();
-    return await _db.rawQuery(query, args);
+    return await db.rawQuery(query, args);
   }
 
   String _buildSelectQuery() {
