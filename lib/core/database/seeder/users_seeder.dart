@@ -61,7 +61,7 @@ class UsersSeeder implements Seeder {
       await db.insert(
         'users',
         user,
-        conflictAlgorithm: ConflictAlgorithm.ignore, // ما يدخلش مرتين لو موجود
+        conflictAlgorithm: ConflictAlgorithm.ignore,
       );
     }
   }
